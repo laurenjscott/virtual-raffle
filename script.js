@@ -12,6 +12,11 @@ const yesclearStorageButton = document.querySelector(
 );
 
 //Local storage stuff
+
+	//THIS IS TEMPORARY 7-7-20222
+localStorage.removeItem("raffleWinner");	
+
+
 let localStorageWinners = localStorage.getItem("raffleWinners")
 	? JSON.parse(localStorage.getItem("raffleWinners"))
 	: undefined;
