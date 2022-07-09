@@ -12,8 +12,8 @@ const yesclearStorageButton = document.querySelector(
 );
 
 //Local storage stuff
-let localStorageWinners = localStorage.getItem("raffleWinner")
-	? JSON.parse(localStorage.getItem("raffleWinner"))
+let localStorageWinners = localStorage.getItem("raffleWinners")
+	? JSON.parse(localStorage.getItem("raffleWinners"))
 	: undefined;
 let allRaffleWinners = [];
 if (localStorageWinners) {
@@ -99,7 +99,7 @@ clearStorageButton.addEventListener("click", (event) => {
 
 //"Yes" button in dialog
 yesclearStorageButton.addEventListener("click", (event) => {
-	localStorage.removeItem("raffleWinner");
+	localStorage.removeItem("raffleWinners");
 	asideUl.innerHTML = "";
 	asideH2.textContent = `Previous Winners: 0`;
 });
@@ -111,7 +111,7 @@ function highlightAndPush(currentWinner) {
 	//add currentWinner to allRaffleWinners array
 	allRaffleWinners.push(currentWinner);
 	//Local storage only accepts strings
-	localStorage.setItem("raffleWinner", JSON.stringify(allRaffleWinners));
+	localStorage.setItem("raffleWinners", JSON.stringify(allRaffleWinners));
 	//remove highlight from previous winner
 	if (document.querySelector("li.highlight") != null) {
 		document.querySelector("li.highlight").classList.remove("highlight");
