@@ -19,6 +19,7 @@ let allRaffleWinners = [];
 if (localStorageWinners) {
 	allRaffleWinners = localStorageWinners;
 }
+let lowestRandom;
 
 //JSON data
 const json =
@@ -47,19 +48,6 @@ if (localStorageWinners) {
 	asideH2.textContent = `Previous Winners: ${allRaffleWinners.length}`;
 }
 
-// JSON.parse(localStorage.raffleWinner).forEach((item) => {
-// 	let li = document.createElement("li");
-// 	li.setAttribute("data-name", item.firstName);
-// 	li.textContent = `${item.firstName}, ${Intl.DateTimeFormat("en-US", {
-// 		dateStyle: "full",
-// 		timeStyle: "long"
-// 	}).format(new Date(item.winDate))}`;
-// 	asideUl.appendChild(li);
-// });
-// asideH2.textContent = `Previous Winners: ${
-// 	JSON.parse(localStorage.raffleWinner).length
-// }`;
-
 function pickWinner() {
 	//add a randomNumber key and value to each raffle entry object
 	entries.raffleEntries.forEach((item) => {
@@ -68,8 +56,20 @@ function pickWinner() {
 	//another random number
 	const docRandomNumber = Math.random();
 
+	//add previous winner to previous winner list, if applicable
+	if (lowestRandom) {
+		let li = document.createElement("li");
+		li.setAttribute("data-name", lowestRandom.firstName);
+		li.textContent = `${lowestRandom.firstName}, ${Intl.DateTimeFormat("en-US", {
+			dateStyle: "full",
+			timeStyle: "long"
+		}).format(new Date(lowestRandom.winDate))}`;
+		asideUl.appendChild(li);
+		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
+	}
+
 	//Who has the lowest random number compared to the rabdomNumber variable? Tell it to the console.
-	let lowestRandom = entries.raffleEntries.reduce((previousMinEntry, entry) =>
+	lowestRandom = entries.raffleEntries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
 			: entry
@@ -78,18 +78,11 @@ function pickWinner() {
 		`Congratulations, ${lowestRandom.firstName}! You are the raffle winner!`
 	);
 
-	//Oh, and save it to local storage along with the current timestamp
-	lowestRandom.winDate = new Date();
-	//add lowestRandom to allRaffleWinners array
-	allRaffleWinners.push(lowestRandom);
-	localStorage.setItem("raffleWinner", JSON.stringify(allRaffleWinners));
-
-	//Finally, highlight the winner visually
-	document
-		.querySelector(`li[data-name='${lowestRandom.firstName}']`)
-		.classList.toggle("highlight");
+	//highlight winner and push winner to local storage
+	highlightAndPush(lowestRandom);
 }
 
+/**************Event Listeners************************************/
 //Pick Winner button
 pickWinnerButton.addEventListener("click", (event) => {
 	// window.location.reload();
@@ -101,11 +94,30 @@ clearStorageButton.addEventListener("click", (event) => {
 	dialog.showModal();
 });
 
+//"Yes" button in dialog
 yesclearStorageButton.addEventListener("click", (event) => {
 	localStorage.removeItem("raffleWinner");
 	asideUl.innerHTML = "";
 	asideH2.textContent = `Previous Winners: 0`;
 });
+
+/************Functions**************************************/
+function highlightAndPush(lowestRandom) {
+	//add a timestamp to raffle winner object
+	lowestRandom.winDate = new Date();
+	//add lowestRandom to allRaffleWinners array
+	allRaffleWinners.push(lowestRandom);
+	//Local storage only accepts strings
+	localStorage.setItem("raffleWinner", JSON.stringify(allRaffleWinners));
+	//remove highlight from previous winner
+	if (document.querySelector("li.highlight") != null) {
+		document.querySelector("li.highlight").classList.remove("highlight");
+	}
+	//Finally, highlight the winner visually
+	document
+		.querySelector(`li[data-name='${lowestRandom.firstName}']`)
+		.classList.add("highlight");
+}
 
 /********************************************************/
 
