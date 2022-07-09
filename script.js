@@ -118,16 +118,3 @@ function highlightAndPush(lowestRandom) {
 		.querySelector(`li[data-name='${lowestRandom.firstName}']`)
 		.classList.add("highlight");
 }
-
-/********************************************************/
-
-// function clickButton(event) {
-// 	let x = event.target.nextElementSibling.lastElementChild; //p element
-// 	x.classList.toggle("hide-element");
-// 	x.classList.toggle("show-element");
-// 	return true;
-// }
-
-// document
-// 	.querySelectorAll("button")
-// 	.forEach((item) => item.addEventListener("click", clickButton));
