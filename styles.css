@@ -46,6 +46,11 @@ button#clear-storage-button {
 	border: 0;
 }
 
+dialog {
+padding-top: 3rem;
+padding-bottom: 3rem;
+}
+
 dialog button {
 	padding: 0.25rem;
 }
