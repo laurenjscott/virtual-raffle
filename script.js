@@ -58,6 +58,30 @@ if (localStorageWinners) {
 	asideH2.textContent = `Previous Winners: ${allRaffleWinners.length}`;
 }
 
+
+
+/**************Event Listeners************************************/
+//Pick Winner button
+pickWinnerButton.addEventListener("click", (event) => {
+	// window.location.reload();
+	pickWinner();
+});
+
+//Clear Storage button
+clearStorageButton.addEventListener("click", (event) => {
+	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
+	dialog.showModal();
+});
+
+//"Yes" button in dialog
+yesclearStorageButton.addEventListener("click", (event) => {
+	localStorage.removeItem("raffleWinners");
+	asideUl.innerHTML = "";
+	asideH2.textContent = `Previous Winners: 0`;
+});
+
+/************Functions**************************************/
+
 function pickWinner() {
 	//add a randomNumber key and value to each raffle entry object
 	entries.raffleEntries.forEach((item) => {
@@ -92,27 +116,7 @@ function pickWinner() {
 	highlightAndPush(currentWinner);
 }
 
-/**************Event Listeners************************************/
-//Pick Winner button
-pickWinnerButton.addEventListener("click", (event) => {
-	// window.location.reload();
-	pickWinner();
-});
 
-//Clear Storage button
-clearStorageButton.addEventListener("click", (event) => {
-	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-	dialog.showModal();
-});
-
-//"Yes" button in dialog
-yesclearStorageButton.addEventListener("click", (event) => {
-	localStorage.removeItem("raffleWinners");
-	asideUl.innerHTML = "";
-	asideH2.textContent = `Previous Winners: 0`;
-});
-
-/************Functions**************************************/
 function highlightAndPush(currentWinner) {
 	//add a timestamp to raffle winner object
 	currentWinner.winDate = new Date();
@@ -128,4 +132,7 @@ function highlightAndPush(currentWinner) {
 	document
 		.querySelector(`li[data-name='${currentWinner.firstName}']`)
 		.classList.add("highlight");
+}
+if (window.HTMLDialogElement == undefined) {
+	dialog.style.display = "none";
 }
