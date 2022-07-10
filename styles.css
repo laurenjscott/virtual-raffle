@@ -49,7 +49,7 @@ button#clear-storage-button {
 dialog {
 	padding-top: 3rem;
 	padding-bottom: 3rem;
-	border: 1px #707070;
+	border: 1px solid #707070;
 }
 
 dialog button {
