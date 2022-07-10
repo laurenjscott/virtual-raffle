@@ -56,6 +56,12 @@ dialog button {
 	padding: 0.25rem;
 }
 
+/* VR-11 branch */
+dialog button:last-child {
+	color: #FFF;
+	background: #0071e3;
+}
+
 .highlight {
 	background-color: yellow;
 	font-weight: bold;
