@@ -10,10 +10,13 @@ const dialog = document.querySelector("dialog");
 const yesclearStorageButton = document.querySelector(
 	"dialog button:first-child"
 );
+//VR-11 branch
+const noCancelButton = document.querySelector(
+	"dialog button:last-child");
 
 //Local storage stuff
 
-	//THIS IS TEMPORARY 7-7-20222
+	//THIS IS TEMPORARY 7-9-2022. Delete 7-10-2022 after running in all user agents.
 localStorage.removeItem("raffleWinner");	
 
 
