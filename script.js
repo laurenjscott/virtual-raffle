@@ -7,9 +7,10 @@ const clearStorageButton = document.querySelector(
 	"button#clear-storage-button"
 );
 const dialog = document.querySelector("dialog");
-const yesclearStorageButton = document.querySelector(
+const yesClearStorageButton = document.querySelector(
 	"dialog button:first-child"
 );
+
 //VR-11 branch
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
@@ -70,14 +71,24 @@ pickWinnerButton.addEventListener("click", (event) => {
 //Clear Storage button
 clearStorageButton.addEventListener("click", (event) => {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
+	dialog.classList.add("display");
+	dialog.classList.remove("hidden");
 	dialog.showModal();
 });
 
 //"Yes" button in dialog
-yesclearStorageButton.addEventListener("click", (event) => {
+yesClearStorageButton.addEventListener("click", (event) => {
 	localStorage.removeItem("raffleWinners");
 	asideUl.innerHTML = "";
 	asideH2.textContent = `Previous Winners: 0`;
+	dialog.classList.remove("display");
+	dialog.classList.add("hidden");
+
+});
+
+//"No" button in dialog
+noCancelButton.addEventListener("click", (event) => {
+	dialog.classList.add("hidden");
 });
 
 /************Functions**************************************/
@@ -133,6 +144,8 @@ function highlightAndPush(currentWinner) {
 		.querySelector(`li[data-name='${currentWinner.firstName}']`)
 		.classList.add("highlight");
 }
+
+//new branch 2022-7-13 12ish
 if (window.HTMLDialogElement == undefined) {
-	dialog.style.display = "none";
+	dialog.classList.add("unsupported", "hidden");
 }
