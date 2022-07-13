@@ -88,6 +88,7 @@ yesClearStorageButton.addEventListener("click", (event) => {
 
 //"No" button in dialog
 noCancelButton.addEventListener("click", (event) => {
+	dialog.classList.remove("display");
 	dialog.classList.add("hidden");
 });
 
