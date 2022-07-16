@@ -10,7 +10,7 @@ html {
 	box-sizing: inherit;
 }
 
-main {
+body {
     touch-action: none;
 }
 
