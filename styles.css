@@ -1,6 +1,6 @@
 html {
 	font-family: "Open Sans", sans-serif;
-	--primary-color: indigo;
+    --primary-color: indigo;
 	box-sizing: border-box;
 }
 
@@ -38,6 +38,7 @@ button {
 	border: 1px solid #707070;
 	font-size: 1rem;
 	color: #000;
+    touch-action: none;
 }
 
 button#clear-storage-button {
@@ -51,7 +52,12 @@ dialog {
 	padding-top: 3rem;
 	padding-bottom: 3rem;
 	border: 1px solid #707070;
+    touch-action: none;
 
+}
+
+dialog * {
+    touch-action: inherit;
 }
 
 /*new branch 2022-07-02 12ish */
