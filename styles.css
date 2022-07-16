@@ -10,6 +10,10 @@ html {
 	box-sizing: inherit;
 }
 
+main {
+    touch-action: none;
+}
+
 header {
 	background-color: #fff;
 	z-index: 999;
