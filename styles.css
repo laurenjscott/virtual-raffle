@@ -79,7 +79,7 @@ dialog button:last-child {
 	background: #0071e3;
 }
 
-button, dialog, dialog::backdrop {
+button, dialog {
     touch-action: none;
 }
 
