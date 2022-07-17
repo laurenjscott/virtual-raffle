@@ -71,8 +71,9 @@ pickWinnerButton.addEventListener("click", (event) => {
 clearStorageButton.addEventListener("click", (event) => {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
     dialog.classList.add("display");
-    dialog.classList.remove("hidden");
     setTimeout(() =>  {dialog.showModal();}, 500);
+    dialog.classList.remove("hidden");
+   
    
 
 });
@@ -150,6 +151,7 @@ function highlightAndPush(currentWinner) {
 		.classList.add("highlight");
 }
 
+//new branch 2022-7-13 12ish
 if (window.HTMLDialogElement == undefined) {
 	dialog.classList.add("unsupported", "hidden");
 }
