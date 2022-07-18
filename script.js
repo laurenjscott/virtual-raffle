@@ -11,9 +11,10 @@ const yesClearStorageButton = document.querySelector(
 	"dialog button:first-child"
 );
 
-//VR-11 branch
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
+
+let hide;
 
 //Local storage stuff
 
@@ -63,34 +64,49 @@ if (localStorageWinners) {
 
 /**************Event Listeners************************************/
 //Pick Winner button
-pickWinnerButton.addEventListener("click", (event) => {
-	// window.location.reload();
+pickWinnerButton.addEventListener("click", () => {
 	pickWinner();
 });
 
 //Clear Storage button
-clearStorageButton.addEventListener("click", (event) => {
+clearStorageButton.addEventListener("click", () => {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-	dialog.classList.add("display");
-	dialog.classList.remove("hidden");
-	dialog.showModal();
+//    setTimeout(() =>  {dialog.showModal();}, 500);
+     if (dialog.classList.contains("unsupported")) {
+        checkUnsupportedBrowser(hide = false);
+     } else {
+        setTimeout(() =>  {dialog.showModal();}, 500);
+
+    }
+   
 });
 
+
 //"Yes" button in dialog
-yesClearStorageButton.addEventListener("click", (event) => {
+yesClearStorageButton.addEventListener("click", () => {
 	localStorage.removeItem("raffleWinners");
 	asideUl.innerHTML = "";
 	asideH2.textContent = `Previous Winners: 0`;
-	dialog.classList.remove("display");
-	dialog.classList.add("hidden");
+    if (dialog.classList.contains("unsupported")) {
+        checkUnsupportedBrowser(hide = true);
+     } 
+	
 
 });
 
 //"No" button in dialog
-noCancelButton.addEventListener("click", (event) => {
-	dialog.classList.remove("display");
-	dialog.classList.add("hidden");
+noCancelButton.addEventListener("click", () => {
+    if (dialog.classList.contains("unsupported")) {
+        checkUnsupportedBrowser(hide = true);
+     } 
 });
+
+/**********************************************************/
+
+
+if (window.HTMLDialogElement == undefined) {
+	dialog.classList.add("unsupported", "hidden");
+}
 
 /************Functions**************************************/
 
@@ -99,8 +115,7 @@ function pickWinner() {
 	entries.raffleEntries.forEach((item) => {
 		item.randomNumber = Math.random();
 	});
-	//another random number
-	const docRandomNumber = Math.random();
+	
 
 	//add previous winner to previous winner list, if applicable
 	if (currentWinner) {
@@ -114,7 +129,7 @@ function pickWinner() {
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
 
-	//Who has the lowest random number compared to the rabdomNumber variable? Tell it to the console.
+	//Who has the lowest random number compared to the randomNumber variable? Tell it to the console.
 	currentWinner = entries.raffleEntries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
@@ -146,7 +161,17 @@ function highlightAndPush(currentWinner) {
 		.classList.add("highlight");
 }
 
-//new branch 2022-7-13 12ish
-if (window.HTMLDialogElement == undefined) {
-	dialog.classList.add("unsupported", "hidden");
+
+
+function checkUnsupportedBrowser (hide) {
+   
+        if (hide === false) {
+            dialog.classList.remove("hidden");
+            dialog.classList.add("display");
+        }
+        else {
+            dialog.classList.remove("display");
+            dialog.classList.add("hidden");
+        }
+    
 }

@@ -1,14 +1,17 @@
 html {
 	font-family: "Open Sans", sans-serif;
-	--primary-color: indigo;
+    --primary-color: indigo;
 	box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 *,
 *:before,
 *:after {
 	box-sizing: inherit;
+    touch-action: inherit;
 }
+
 
 header {
 	background-color: #fff;
@@ -38,6 +41,7 @@ button {
 	border: 1px solid #707070;
 	font-size: 1rem;
 	color: #000;
+    touch-action: none;
 }
 
 button#clear-storage-button {
@@ -54,8 +58,7 @@ dialog {
 
 }
 
-/*new branch 2022-07-02 12ish */
-/* for browser version that don's support <dialog> yet  */
+
 dialog.unsupported.hidden { 
 	display: none;
 }
@@ -74,6 +77,10 @@ dialog button {
 dialog button:last-child {
 	color: #FFF;
 	background: #0071e3;
+}
+
+button, dialog, dialog::backdrop {
+    touch-action: none;
 }
 
 .highlight {
