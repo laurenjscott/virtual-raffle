@@ -75,7 +75,9 @@ clearStorageButton.addEventListener("click", () => {
      if (dialog.classList.contains("unsupported")) {
         checkUnsupportedBrowser(hide = false);
      } else {
-        setTimeout(() =>  {dialog.showModal();}, 500);
+//        setTimeout(() =>  {dialog.showModal();}, 500);
+        dialog.showModal();
+
     }
    
 });
