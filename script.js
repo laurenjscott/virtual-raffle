@@ -1,4 +1,4 @@
-//Elements
+/*Elements***********************************/
 const mainUl = document.querySelector("main ul");
 const asideH2 = document.querySelector("aside h2");
 const asideUl = document.querySelector("aside ul");
@@ -10,18 +10,17 @@ const dialog = document.querySelector("dialog");
 const yesClearStorageButton = document.querySelector(
 	"dialog button:first-child"
 );
-
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
+/*******************************************/
 
-let hide;
+//JSON data
+const json =
+	'{"raffleEntries":[{"entryID": 1, "firstName": "Heather"}, {"entryID": 2, "firstName": "Akilah"}, {"entryID": 3, "firstName": "Marcus"},{"entryID": 4, "firstName": "Jacob"},{"entryID": 5, "firstName": "Erika"}]}';
+const entries = JSON.parse(json);
+
 
 //Local storage stuff
-
-	//THIS IS TEMPORARY 7-9-2022. Delete 7-10-2022 after running in all user agents.
-localStorage.removeItem("raffleWinner");	
-
-
 let localStorageWinners = localStorage.getItem("raffleWinners")
 	? JSON.parse(localStorage.getItem("raffleWinners"))
 	: undefined;
@@ -33,10 +32,9 @@ if (localStorageWinners) {
 //Used to save winner of raffle
 let currentWinner;
 
-//JSON data
-const json =
-	'{"raffleEntries":[{"entryID": 1, "firstName": "Heather"}, {"entryID": 2, "firstName": "Akilah"}, {"entryID": 3, "firstName": "Marcus"},{"entryID": 4, "firstName": "Jacob"},{"entryID": 5, "firstName": "Erika"}]}';
-const entries = JSON.parse(json);
+//Used in workflow for browsers that don't support dialog element. Controls visibility of element that renders when dialog isn't supported (it appears a divlike block element)
+let hide;
+
 
 //render list of entries
 entries.raffleEntries.forEach((item) => {
@@ -62,7 +60,8 @@ if (localStorageWinners) {
 
 
 
-/**************Event Listeners************************************/
+/*Event Listeners************************************/
+
 //Pick Winner button
 pickWinnerButton.addEventListener("click", () => {
 	pickWinner();
@@ -71,11 +70,10 @@ pickWinnerButton.addEventListener("click", () => {
 //Clear Storage button
 clearStorageButton.addEventListener("click", () => {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-//    setTimeout(() =>  {dialog.showModal();}, 500);
      if (dialog.classList.contains("unsupported")) {
-        checkUnsupportedBrowser(hide = false);
+        checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
      } else {
-        setTimeout(() =>  {dialog.showModal();}, 500);
+        setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
 
     }
    
@@ -103,7 +101,7 @@ noCancelButton.addEventListener("click", () => {
 
 /**********************************************************/
 
-
+//Check if browser supports the dialog element
 if (window.HTMLDialogElement == undefined) {
 	dialog.classList.add("unsupported", "hidden");
 }
@@ -129,7 +127,7 @@ function pickWinner() {
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
 
-	//Who has the lowest random number compared to the randomNumber variable? Tell it to the console.
+	//Who has the lowest random number? Tell it to the console.
 	currentWinner = entries.raffleEntries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
@@ -162,9 +160,8 @@ function highlightAndPush(currentWinner) {
 }
 
 
-
+//Controls visibility of element that renders when dialog isn't supported (it appears a div-like block element).
 function checkUnsupportedBrowser (hide) {
-   
         if (hide === false) {
             dialog.classList.remove("hidden");
             dialog.classList.add("display");
@@ -173,5 +170,4 @@ function checkUnsupportedBrowser (hide) {
             dialog.classList.remove("display");
             dialog.classList.add("hidden");
         }
-    
 }
