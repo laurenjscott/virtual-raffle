@@ -137,8 +137,11 @@ function pickWinner() {
 	//highlight winner and push winner to local storage
 	highlightAndPush(currentWinner);
     
-    //enables or disables "Clear Winners" button based on local storage value
-    toggleClearStorageButtonState();
+    //enables or disables "Clear Winners" button based on local storage value. Caveat: don't toggle local storage was previously empty prior to function execution
+    if (JSON.parse(localStorage.raffleWinners).length > 1) {
+        toggleClearStorageButtonState();
+    }
+    
 }
 
 
