@@ -44,7 +44,7 @@ if (localStorageWinners) {
     clearStorageButton.removeAttribute("disabled");
 } else {
      clearStorageButton.classList.add("disabled-button");
-     clearStorageButton.setAttribute("disabled", "");
+//     clearStorageButton.setAttribute("disabled", "");
 }
 
 
@@ -190,7 +190,7 @@ function toggleClearStorageButtonState () {
          if (clearStorageButton.classList.contains("enabled-button")) {
             clearStorageButton.classList.replace("enabled-button", "disabled-button");
             clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
-            clearStorageButton.setAttribute("disabled", "");
+//            clearStorageButton.setAttribute("disabled", "");
         }
     }
 }
