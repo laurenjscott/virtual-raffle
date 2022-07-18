@@ -195,7 +195,7 @@ function toggleClearStorageButtonState () {
     }
 }
 
-function clearStorageButtonFunction (event) {
+function clearStorageButtonFunction () {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
     
         if (dialog.classList.contains("unsupported")) {
