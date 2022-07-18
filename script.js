@@ -195,7 +195,7 @@ function toggleClearStorageButtonState () {
     }
 }
 
-function clearStorageButtonFunction () {
+function clearStorageButtonFunction (event) {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
     
         if (clearStorageButton.getAttribute === "aria-disabled") {
