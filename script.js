@@ -198,9 +198,6 @@ function toggleClearStorageButtonState () {
 function clearStorageButtonFunction (event) {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
     
-        if (clearStorageButton.getAttribute === "aria-disabled") {
-            event.preventDefault();
-        }
         if (dialog.classList.contains("unsupported")) {
             checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
         } else {
