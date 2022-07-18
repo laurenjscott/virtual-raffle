@@ -1,4 +1,5 @@
-/*Elements***********************************/
+/*Variables***********************************/
+//Elements
 const mainUl = document.querySelector("main ul");
 const asideH2 = document.querySelector("aside h2");
 const asideUl = document.querySelector("aside ul");
@@ -12,7 +13,6 @@ const yesClearStorageButton = document.querySelector(
 );
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
-/*******************************************/
 
 //JSON data
 const json =
@@ -33,7 +33,26 @@ if (localStorageWinners) {
 let currentWinner;
 
 //Used in workflow for browsers that don't support dialog element. Controls visibility of element that renders when dialog isn't supported (it appears a divlike block element)
-let hide;
+//let hide;
+
+/***************************************************************************/
+
+//Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
+if (localStorageWinners) {
+    clearStorageButton.classList.add("enable-button");
+    clearStorageButton.addEventListener("click", () => {
+	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
+        if (dialog.classList.contains("unsupported")) {
+            checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
+        } else {
+            setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
+
+        }
+   
+    });
+} else {
+     clearStorageButton.classList.add("disable-button");
+}
 
 
 //render list of entries
@@ -60,23 +79,11 @@ if (localStorageWinners) {
 
 
 
-/*Event Listeners************************************/
+/*Other Event Listeners************************************/
 
 //Pick Winner button
 pickWinnerButton.addEventListener("click", () => {
 	pickWinner();
-});
-
-//Clear Storage button
-clearStorageButton.addEventListener("click", () => {
-	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-     if (dialog.classList.contains("unsupported")) {
-        checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
-     } else {
-        setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
-
-    }
-   
 });
 
 
@@ -89,7 +96,6 @@ yesClearStorageButton.addEventListener("click", () => {
         checkUnsupportedBrowser(hide = true);
      } 
 	
-
 });
 
 //"No" button in dialog
@@ -171,3 +177,5 @@ function checkUnsupportedBrowser (hide) {
             dialog.classList.add("hidden");
         }
 }
+
+//Toggle state of and script action applied to "Clear Winners" button
