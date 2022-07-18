@@ -32,8 +32,7 @@ if (localStorageWinners) {
 //Used to save winner of raffle
 let currentWinner;
 
-//Used in workflow for browsers that don't support dialog element. Controls visibility of element that renders when dialog isn't supported (it appears a divlike block element)
-//let hide;
+
 
 /***************************************************************************/
 
@@ -191,12 +190,17 @@ function toggleClearStorageButtonState () {
             clearStorageButton.classList.replace("enabled-button", "disabled-button");
             clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
             clearStorageButton.setAttribute("aria-disabled", "true");
+
         }
     }
 }
 
 function clearStorageButtonFunction () {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
+    
+        if (clearStorageButton.getAttribute === "aria-disabled") {
+            event.preventDefault();
+        }
         if (dialog.classList.contains("unsupported")) {
             checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
         } else {
