@@ -190,7 +190,7 @@ function toggleClearStorageButtonState () {
          if (clearStorageButton.classList.contains("enabled-button")) {
             clearStorageButton.classList.replace("enabled-button", "disabled-button");
             clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
-          clearStorageButton.setAttribute("aria-disabled", "true");
+            clearStorageButton.setAttribute("aria-disabled", "true");
         }
     }
 }
