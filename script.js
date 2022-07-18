@@ -39,19 +39,10 @@ let currentWinner;
 
 //Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
 if (localStorageWinners) {
-    clearStorageButton.classList.add("enable-button");
-    clearStorageButton.addEventListener("click", () => {
-	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-        if (dialog.classList.contains("unsupported")) {
-            checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
-        } else {
-            setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
-
-        }
-   
-    });
+    clearStorageButton.classList.add("enabled-button");
+    clearStorageButton.addEventListener("click", clearStorageButtonFunction);
 } else {
-     clearStorageButton.classList.add("disable-button");
+     clearStorageButton.classList.add("disabled-button");
 }
 
 
@@ -94,7 +85,8 @@ yesClearStorageButton.addEventListener("click", () => {
 	asideH2.textContent = `Previous Winners: 0`;
     if (dialog.classList.contains("unsupported")) {
         checkUnsupportedBrowser(hide = true);
-     } 
+     }
+    toggleClearStorageButtonState();
 	
 });
 
@@ -102,7 +94,9 @@ yesClearStorageButton.addEventListener("click", () => {
 noCancelButton.addEventListener("click", () => {
     if (dialog.classList.contains("unsupported")) {
         checkUnsupportedBrowser(hide = true);
-     } 
+     }
+    toggleClearStorageButtonState();
+
 });
 
 /**********************************************************/
@@ -119,8 +113,6 @@ function pickWinner() {
 	entries.raffleEntries.forEach((item) => {
 		item.randomNumber = Math.random();
 	});
-	
-
 	//add previous winner to previous winner list, if applicable
 	if (currentWinner) {
 		let li = document.createElement("li");
@@ -132,7 +124,6 @@ function pickWinner() {
 		asideUl.appendChild(li);
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
-
 	//Who has the lowest random number? Tell it to the console.
 	currentWinner = entries.raffleEntries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
@@ -145,6 +136,9 @@ function pickWinner() {
 
 	//highlight winner and push winner to local storage
 	highlightAndPush(currentWinner);
+    
+    //enables or disables "Clear Winners" button based on local storage value
+    toggleClearStorageButtonState();
 }
 
 
@@ -178,4 +172,32 @@ function checkUnsupportedBrowser (hide) {
         }
 }
 
-//Toggle state of and script action applied to "Clear Winners" button
+
+//Toggle state of and script action applied to "Clear Winners" button. Executed after clicking the "Clear Winners" button
+function toggleClearStorageButtonState () {
+    if (localStorage.raffleWinners) {
+        if (clearStorageButton.classList.contains("disabled-button")) {
+            clearStorageButton.classList.replace("disabled-button", "enabled-button");
+            clearStorageButton.addEventListener("click", clearStorageButtonFunction);
+        } else {
+           //Do nothing 
+        }
+    } else {
+         if (clearStorageButton.classList.contains("enabled-button")) {
+            clearStorageButton.classList.replace("enabled-button", "disabled-button");
+            clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
+        } else {
+           //Do nothing 
+        }
+    }
+}
+
+function clearStorageButtonFunction () {
+	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
+        if (dialog.classList.contains("unsupported")) {
+            checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
+        } else {
+            setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
+
+        }    
+}
