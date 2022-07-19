@@ -1,3 +1,4 @@
+/*Variables***********************************/
 //Elements
 const mainUl = document.querySelector("main ul");
 const asideH2 = document.querySelector("aside h2");
@@ -10,18 +11,16 @@ const dialog = document.querySelector("dialog");
 const yesClearStorageButton = document.querySelector(
 	"dialog button:first-child"
 );
-
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
 
-let hide;
+//JSON data
+const json =
+	'{"raffleEntries":[{"entryID": 1, "firstName": "Heather"}, {"entryID": 2, "firstName": "Akilah"}, {"entryID": 3, "firstName": "Marcus"},{"entryID": 4, "firstName": "Jacob"},{"entryID": 5, "firstName": "Erika"}]}';
+const entries = JSON.parse(json);
+
 
 //Local storage stuff
-
-	//THIS IS TEMPORARY 7-9-2022. Delete 7-10-2022 after running in all user agents.
-localStorage.removeItem("raffleWinner");	
-
-
 let localStorageWinners = localStorage.getItem("raffleWinners")
 	? JSON.parse(localStorage.getItem("raffleWinners"))
 	: undefined;
@@ -33,10 +32,20 @@ if (localStorageWinners) {
 //Used to save winner of raffle
 let currentWinner;
 
-//JSON data
-const json =
-	'{"raffleEntries":[{"entryID": 1, "firstName": "Heather"}, {"entryID": 2, "firstName": "Akilah"}, {"entryID": 3, "firstName": "Marcus"},{"entryID": 4, "firstName": "Jacob"},{"entryID": 5, "firstName": "Erika"}]}';
-const entries = JSON.parse(json);
+
+
+/***************************************************************************/
+
+//Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
+if (localStorageWinners) {
+    clearStorageButton.classList.add("enabled-button");
+    clearStorageButton.addEventListener("click", clearStorageButtonFunction);
+    clearStorageButton.removeAttribute("aria-disabled");
+} else {
+     clearStorageButton.classList.add("disabled-button");
+     clearStorageButton.setAttribute("aria-disabled", "true");
+}
+
 
 //render list of entries
 entries.raffleEntries.forEach((item) => {
@@ -62,23 +71,11 @@ if (localStorageWinners) {
 
 
 
-/**************Event Listeners************************************/
+/*Other Event Listeners************************************/
+
 //Pick Winner button
 pickWinnerButton.addEventListener("click", () => {
 	pickWinner();
-});
-
-//Clear Storage button
-clearStorageButton.addEventListener("click", () => {
-	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-//    setTimeout(() =>  {dialog.showModal();}, 500);
-     if (dialog.classList.contains("unsupported")) {
-        checkUnsupportedBrowser(hide = false);
-     } else {
-        setTimeout(() =>  {dialog.showModal();}, 500);
-
-    }
-   
 });
 
 
@@ -89,21 +86,23 @@ yesClearStorageButton.addEventListener("click", () => {
 	asideH2.textContent = `Previous Winners: 0`;
     if (dialog.classList.contains("unsupported")) {
         checkUnsupportedBrowser(hide = true);
-     } 
+     }
+    toggleClearStorageButtonState();
 	
-
 });
 
 //"No" button in dialog
 noCancelButton.addEventListener("click", () => {
     if (dialog.classList.contains("unsupported")) {
         checkUnsupportedBrowser(hide = true);
-     } 
+     }
+    toggleClearStorageButtonState();
+
 });
 
 /**********************************************************/
 
-
+//Check if browser supports the dialog element
 if (window.HTMLDialogElement == undefined) {
 	dialog.classList.add("unsupported", "hidden");
 }
@@ -115,8 +114,6 @@ function pickWinner() {
 	entries.raffleEntries.forEach((item) => {
 		item.randomNumber = Math.random();
 	});
-	
-
 	//add previous winner to previous winner list, if applicable
 	if (currentWinner) {
 		let li = document.createElement("li");
@@ -128,8 +125,7 @@ function pickWinner() {
 		asideUl.appendChild(li);
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
-
-	//Who has the lowest random number compared to the randomNumber variable? Tell it to the console.
+	//Who has the lowest random number? Tell it to the console.
 	currentWinner = entries.raffleEntries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
@@ -141,6 +137,12 @@ function pickWinner() {
 
 	//highlight winner and push winner to local storage
 	highlightAndPush(currentWinner);
+    
+    //enables or disables "Clear Winners" button based on local storage value. Caveat: don't toggle local storage was previously empty prior to function execution
+    if (JSON.parse(localStorage.raffleWinners).length > 1) {
+        toggleClearStorageButtonState();
+    }
+    
 }
 
 
@@ -162,9 +164,8 @@ function highlightAndPush(currentWinner) {
 }
 
 
-
+//Controls visibility of element that renders when dialog isn't supported (it appears a div-like block element).
 function checkUnsupportedBrowser (hide) {
-   
         if (hide === false) {
             dialog.classList.remove("hidden");
             dialog.classList.add("display");
@@ -173,5 +174,34 @@ function checkUnsupportedBrowser (hide) {
             dialog.classList.remove("display");
             dialog.classList.add("hidden");
         }
+}
+
+
+//Toggle state of and script action applied to "Clear Winners" button. Executed after clicking the "Clear Winners" button
+function toggleClearStorageButtonState () {
+    if (localStorage.raffleWinners) {
+        if (clearStorageButton.classList.contains("disabled-button")) {
+            clearStorageButton.classList.replace("disabled-button", "enabled-button");
+            clearStorageButton.addEventListener("click", clearStorageButtonFunction);
+            clearStorageButton.removeAttribute("aria-disabled");
+        }
+    } else {
+         if (clearStorageButton.classList.contains("enabled-button")) {
+            clearStorageButton.classList.replace("enabled-button", "disabled-button");
+            clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
+            clearStorageButton.setAttribute("aria-disabled", "true");
+
+        }
+    }
+}
+
+function clearStorageButtonFunction () {
+	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
     
+        if (dialog.classList.contains("unsupported")) {
+            checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
+        } else {
+            setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
+
+        }    
 }

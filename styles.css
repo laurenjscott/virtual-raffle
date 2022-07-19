@@ -44,11 +44,13 @@ button {
     touch-action: none;
 }
 
+/*
 button#clear-storage-button {
 	background-color: #f00;
 	color: #fff;
-	border: 0;
+	opacity: .1;
 }
+*/
 
 
 dialog {
@@ -79,7 +81,7 @@ dialog button:last-child {
 	background: #0071e3;
 }
 
-button, dialog, dialog::backdrop {
+button, button[disabled], button:disabled, dialog, dialog::backdrop {
     touch-action: none;
 }
 
@@ -87,4 +89,26 @@ button, dialog, dialog::backdrop {
 	background-color: yellow;
 	font-weight: bold;
 }
+
+
+.enabled-button {
+    cursor: pointer;
+    opacity: 1;
+
+}
+
+
+.disabled-button {
+    cursor: default; 
+    opacity: 0.33;
+}
+
+
+.enabled-button, .disabled-button {
+    background-color: #F00;
+    border: 0;
+    color: #FFF;
+}
+
+
 
