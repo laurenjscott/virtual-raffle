@@ -125,6 +125,7 @@ button, button[disabled], button:disabled, dialog, dialog::backdrop {
 .disabled-button {
     cursor: default; 
     opacity: 0.33;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
