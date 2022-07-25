@@ -9,7 +9,7 @@ const clearStorageButton = document.querySelector(
 );
 const dialog = document.querySelector("dialog");
 const yesClearStorageButton = document.querySelector(
-	"dialog button:first-child"
+	"dialog button:first-of-type"
 );
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
@@ -69,7 +69,12 @@ if (localStorageWinners) {
 	asideH2.textContent = `Previous Winners: ${allRaffleWinners.length}`;
 }
 
+/**********************************************************/
 
+//Check if browser supports the dialog element
+if (window.HTMLDialogElement == undefined) {
+	dialog.classList.add("unsupported", "hidden");
+}
 
 /*Other Event Listeners************************************/
 
@@ -100,12 +105,6 @@ noCancelButton.addEventListener("click", () => {
 
 });
 
-/**********************************************************/
-
-//Check if browser supports the dialog element
-if (window.HTMLDialogElement == undefined) {
-	dialog.classList.add("unsupported", "hidden");
-}
 
 /************Functions**************************************/
 
