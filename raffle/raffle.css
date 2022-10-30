@@ -114,6 +114,10 @@ button, button[disabled], button:disabled, dialog, dialog::backdrop {
 	font-weight: bold;
 }
 
+.italic {
+    font-style: italic;
+}
+
 
 .enabled-button {
     cursor: pointer;
