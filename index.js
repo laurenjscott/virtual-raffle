@@ -1,7 +1,22 @@
+const errorMessageString = document.querySelector("form p");
+const allInputs = document.querySelectorAll("input");
+const submitButton = document.querySelector("button");
+const allInputsArray = [...allInputs];
+
+
+//Give button more emphasis when more than 1 input has a value  
+const recolorSubmitButton = () => {
+    const inputsWithValuesArray = allInputsArray.filter(input => input.value.length > 0);
+    if (inputsWithValuesArray.length > 1) {
+        submitButton.classList.add("buttonValidFormData");
+    } else {
+        submitButton.classList.remove("buttonValidFormData");
+    }
+}
+
+
 const submitEntries = () => {
-    const allInputs = document.querySelectorAll("input");
     const inputValues = [];
-    const allInputsArray = [...allInputs];
     allInputsArray.forEach(input => {
         if(input.value != undefined && input.value != null && input.value != "") {
            inputValues.push(input.value);
@@ -9,11 +24,13 @@ const submitEntries = () => {
     });
     //At least two entries?
     if(inputValues.length < 2) {
-        alert("At least two entries are required!");
+        errorMessageString.classList.remove("error-message-string-hidden");
+        errorMessageString.textContent = "Error: at least two entries are required!";
         return;
     //All entries have at least 2 letters?
     } else if(inputValues.some(inputValue => inputValue.length <= 1) == true) {
-        alert("Each name must contain at least two letters!");
+        errorMessageString.classList.remove("error-message-string-hidden");
+        errorMessageString.textContent = "Error: each name must contain at least two letters!";
         return;
     }
     //No duplicates?    
@@ -22,7 +39,8 @@ const submitEntries = () => {
     const dupeCountsArray = Object.values(dupeCountsObj);
     const isDupe = dupeCountsArray.some(count => count > 1 );
     if(isDupe) {
-        alert("No duplicate entries allowed!");
+        errorMessageString.classList.remove("error-message-string-hidden");
+        errorMessageString.textContent = "Error: no duplicate entries allowed!";
         return;
     } else {
           const entriesObj = {"raffleEntries": ""};
@@ -38,6 +56,5 @@ const submitEntries = () => {
     }
 }
 
-
-const submitButton = document.querySelector("button");
+allInputs.forEach(input => input.addEventListener("input", () => recolorSubmitButton()));
 submitButton.addEventListener("click", () => submitEntries());
