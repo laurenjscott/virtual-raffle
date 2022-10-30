@@ -14,11 +14,9 @@ const yesClearStorageButton = document.querySelector(
 );
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
+const recentRaffleTimestampParagraph = document.querySelector("main section p");
 
 //JSON data
-//const json =
-//	'{"raffleEntries":[{"entryID": 1, "firstName": "Heather"}, {"entryID": 2, "firstName": "Akilah"}, {"entryID": 3, "firstName": "Marcus"},{"entryID": 4, "firstName": "Jacob"},{"entryID": 5, "firstName": "Erika"}]}';
-//const entries = JSON.parse(json);
 const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
 
 //Local storage stuff
@@ -143,6 +141,9 @@ function pickWinner() {
         toggleClearStorageButtonState();
     }
     
+    //Update Raffle Entries timestamp string
+    showRecentRaffleTimestamp();
+    
 }
 
 
@@ -204,4 +205,21 @@ function clearStorageButtonFunction () {
             setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
 
         }    
+}
+
+
+//When user clicks "Pick Winners" button, current timestamp is displayed under the Raffle Entries section
+function showRecentRaffleTimestamp () {
+    //Save most recent entry's timestamp from session storage as a variable
+    const previousRaffleWinners = JSON.parse(localStorage.raffleWinners);
+    const recentRaffleEntryTimestamp = previousRaffleWinners[previousRaffleWinners.length - 1].winDate;
+    //Format date variable so it uses US English syntax
+    const recentRaffleEntryTimestampUSFormatted = Intl.DateTimeFormat("en-US", {
+			dateStyle: "full",
+			timeStyle: "long"
+		}).format(new Date(recentRaffleEntryTimestamp));
+    console.log(recentRaffleEntryTimestampUSFormatted);
+    //Add "Raffle conducted " + dateVariable to last paragraph in Raffle Entries section
+    recentRaffleTimestampParagraph.textContent = `Raffle conducted on ${recentRaffleEntryTimestampUSFormatted}`;
+        
 }
