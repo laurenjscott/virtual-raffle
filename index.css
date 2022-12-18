@@ -1,12 +1,14 @@
 html {
+/*
     font-family: "Open Sans", sans-serif;
     box-sizing: border-box;
+*/
     font-size: 1rem;
 }
 
 *, *:before, *:after {
     font-family: inherit;
-    box-sizing: inherit;
+/*    box-sizing: inherit;*/
 }
 
 
@@ -28,13 +30,15 @@ input {
 }
 
 button {
+/*
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+*/
     border: 0;
     border-radius: 0.25rem;
     padding: 1rem 2rem;
-    cursor: pointer;
+/*    cursor: pointer;*/
 }
 
 input, button {
