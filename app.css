@@ -1,6 +1,10 @@
 html {
     font-family: "Open Sans", sans-serif;
     box-sizing: border-box;
+    --burgundy: #AB0552;
+    --purple: #B175FF;
+    --cream: #EFEBE2;
+    --black: #07040A;
 }
 
 *, *:before, *:after {
@@ -9,7 +13,23 @@ html {
 
 button {
     -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: #FFF;
     cursor: pointer;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 0;
+    font-size: 1rem;
+    touch-action: none; /*prevents zoom from happening when a user triple clicks on a button */
+}
+
+button.action-button{
+    background-color: var(--purple);
+}
+
+button.destructive-button{
+    background-color: var(--burgundy);
 }
 
 dialog {
