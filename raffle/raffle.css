@@ -1,14 +1,14 @@
 html {
-	font-family: "Open Sans", sans-serif;
+/*	font-family: "Open Sans", sans-serif;*/
     --primary-color: indigo;
-	box-sizing: border-box;
+/*	box-sizing: border-box;*/
     touch-action: manipulation;
 }
 
 *,
 *:before,
 *:after {
-	box-sizing: inherit;
+/*	box-sizing: inherit;*/
     touch-action: inherit;
 }
 
@@ -33,8 +33,8 @@ main li {
 }
 
 button {
-	-webkit-appearance: none;
-	cursor: pointer;
+/*	-webkit-appearance: none;*/
+/*	cursor: pointer;*/
 	margin-top: 0.5rem;
 	padding: 1.5rem 3rem;
 	border-radius: 0.5rem;
@@ -45,6 +45,7 @@ button {
 }
 
 
+/*
 dialog {
 	padding-top: 3rem;
 	padding-bottom: 3rem;
@@ -56,6 +57,7 @@ dialog {
 dialog::backdrop {
     background-color: rgba(0,0,0,0.4);
 }
+*/
 
 /*applies only to browsers that don't currently support <dialog>*/
 dialog.unsupported {
