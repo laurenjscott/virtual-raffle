@@ -5,10 +5,13 @@ html {
     --purple: #B175FF;
     --cream: #EFEBE2;
     --black: #07040A;
+    touch-action: manipulation;
+
 }
 
 *, *:before, *:after {
     box-sizing: inherit;
+    font-family: inherit;
 }
 
 button {
@@ -21,7 +24,8 @@ button {
     border-radius: 0.5rem;
     border: 0;
     font-size: 1rem;
-    touch-action: none; /*prevents zoom from happening when a user triple clicks on a button */
+/*    touch-action: none; */
+    width: 300px;
 }
 
 button.action-button{
@@ -30,6 +34,17 @@ button.action-button{
 
 button.destructive-button{
     background-color: var(--burgundy);
+}
+
+button[disabled], button:disabled {
+    opacity: 0.5;
+    cursor: auto;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+i {
+    margin-right: 0.5rem;
 }
 
 dialog {
@@ -43,3 +58,46 @@ dialog {
 dialog::backdrop {
     background-color: rgba(0,0,0,0.4);
 }
+
+button, button[disabled], button:disabled, dialog, dialog::backdrop {
+    touch-action: none; /*prevents zoom from happening when a user triple clicks on a element on a smartphone */
+}
+
+/*applies only to browsers that don't currently support <dialog>*/
+dialog.unsupported {
+    width: 100%;
+    height: 100%;
+
+}
+
+/*applies only to browsers that don't currently support <dialog>*/
+dialog.unsupported.hidden { 
+	display: none;
+}
+
+/*applies only to browsers that don't currently support <dialog>*/
+dialog.unsupported.display { 
+    background-color: rgba(0,0,0,0.4);
+    border: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+dialog button {
+	padding: 0.25rem;
+    width: max-content;
+}
+
+dialog button:first-of-type {
+	color: var(--black);
+}
+
+dialog button:last-child {
+	background: #0071e3;
+}
+
