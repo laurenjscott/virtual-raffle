@@ -7,13 +7,13 @@ const allInputsArray = [...allInputs];
 //Give button more emphasis when more than 1 input has a value  
 const recolorSubmitButton = () => {
     const inputsWithValuesArray = allInputsArray.filter(input => input.value.length > 0);
+    console.log(inputsWithValuesArray.length);
     if (inputsWithValuesArray.length > 1) {
-        submitButton.classList.add("buttonValidFormData");
+        submitButton.removeAttribute("disabled");
     } else {
-        submitButton.classList.remove("buttonValidFormData");
+        submitButton.setAttribute("disabled", "true");
     }
 }
-
 
 const submitEntries = () => {
     const inputValues = [];
