@@ -37,12 +37,10 @@ let currentWinner;
 
 //Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
 if (localStorageWinners) {
-    clearStorageButton.classList.add("enabled-button");
     clearStorageButton.addEventListener("click", clearStorageButtonFunction);
-    clearStorageButton.removeAttribute("aria-disabled");
+    clearStorageButton.removeAttribute("disabled");
 } else {
-     clearStorageButton.classList.add("disabled-button");
-     clearStorageButton.setAttribute("aria-disabled", "true");
+     clearStorageButton.setAttribute("disabled", "true");
 }
 
 
@@ -181,16 +179,14 @@ function checkUnsupportedBrowser (hide) {
 //Toggle state of and script action applied to "Clear Winners" button. Executed after clicking the "Clear Winners" button
 function toggleClearStorageButtonState () {
     if (localStorage.raffleWinners) {
-        if (clearStorageButton.classList.contains("disabled-button")) {
-            clearStorageButton.classList.replace("disabled-button", "enabled-button");
+        if (clearStorageButton.hasAttribute("disabled")) {
             clearStorageButton.addEventListener("click", clearStorageButtonFunction);
-            clearStorageButton.removeAttribute("aria-disabled");
+            clearStorageButton.removeAttribute("disabled");
         }
     } else {
-         if (clearStorageButton.classList.contains("enabled-button")) {
-            clearStorageButton.classList.replace("enabled-button", "disabled-button");
+         if (clearStorageButton.hasAttribute("disabled") == false) {
             clearStorageButton.removeEventListener("click", clearStorageButtonFunction);
-            clearStorageButton.setAttribute("aria-disabled", "true");
+            clearStorageButton.setAttribute("disabled", "true");
 
         }
     }
