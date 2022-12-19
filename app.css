@@ -26,14 +26,24 @@ button {
     font-size: 1rem;
 /*    touch-action: none; */
     width: 300px;
+    
 }
 
-button.action-button{
+button.action-button {
     background-color: var(--purple);
+}
+
+button.action-button:not([disabled]):hover {
+    background-color: var(--cream);
+    color: var(--black);
 }
 
 button.destructive-button{
     background-color: var(--burgundy);
+}
+
+button.destructive-button:not([disabled]):hover {
+    border-radius: 0;
 }
 
 button[disabled], button:disabled {
