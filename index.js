@@ -1,60 +1,85 @@
-const errorMessageString = document.querySelector("form p");
-const allInputs = document.querySelectorAll("input");
+const errorMessagePara = document.querySelector("form p");
+const allInputsObject = document.querySelectorAll("input");
+const allInputsArray = [...allInputsObject];
 const submitButton = document.querySelector("button");
-const allInputsArray = [...allInputs];
 
 
-//Give button more emphasis when more than 1 input has a value  
-const recolorSubmitButton = () => {
-    const inputsWithValuesArray = allInputsArray.filter(input => input.value.length > 0);
-    console.log(inputsWithValuesArray.length);
-    if (inputsWithValuesArray.length > 1) {
-        submitButton.removeAttribute("disabled");
+const checkInputForDuplicates = () => {
+    const otherInputValuesArray = [];
+    //Get current input value
+    const currentInput = event.target;
+    //Get array of all OTHER input values
+    allInputsArray.forEach(input => {
+        if(input != currentInput) {
+            otherInputValuesArray.push(input);
+        }
+    })
+    //If current input value matches one of the other input values, set custom validity message.
+    if(otherInputValuesArray.some(input => currentInput.value.toLowerCase() == input.value.toLowerCase())) {
+        currentInput.setCustomValidity("There is a duplicate name entry!");
+        console.log(currentInput.validity);
     } else {
-        submitButton.setAttribute("disabled", "true");
+        currentInput.setCustomValidity("");
     }
 }
+
 
 const submitEntries = () => {
-    const inputValues = [];
-    allInputsArray.forEach(input => {
-        if(input.value != undefined && input.value != null && input.value != "") {
-           inputValues.push(input.value);
+    let errorCount = 0;
+    allInputsArray.forEach(input => { 
+        if (errorCount == 0) { //stop forEach once an error is detected in an input value.
+            if(input.validity.patternMismatch == true) { //regex pattern in HTML doesn't match
+                const errorMessageString = "Name must contain at least 1 letter and should be at least 2 characters long. No leading or trailing spaces either.";
+                errorMessagePara.textContent = errorMessageString;
+                errorMessagePara.classList.remove("error-message-string-hidden");
+                input.focus();
+                errorCount++;
+        }   else if (input.validity.customError == true) { // duplicate entries
+                const errorMessageString = input.validationMessage;
+                errorMessagePara.textContent = errorMessageString;
+                errorMessagePara.classList.remove("error-message-string-hidden");
+                input.focus();
+                errorCount++;
+        }   else { // not a custom error from "dupe" error or a pattern mismatch.  If error, it's from "at least 2 entries" contraint
+                const allInputValues = [];
+                allInputsArray.forEach(input => {
+                    if(input.value != undefined && input.value != null && input.value != "") {
+                        allInputValues.push(input.value);
+                    }
+                });
+                if(allInputValues.length < 2) {
+                    const errorMessageString = "At least 2 name entries are required."
+                    errorMessagePara.textContent = errorMessageString;
+                    errorMessagePara.classList.remove("error-message-string-hidden");
+                    input.focus();
+                    errorCount++;
+                }
+            
+            }
         }
+        
     });
-    //At least two entries?
-    if(inputValues.length < 2) {
-        errorMessageString.classList.remove("error-message-string-hidden");
-        errorMessageString.textContent = "Error: at least two entries are required!";
+    if(errorCount) {
         return;
-    //All entries have at least 2 letters?
-    } else if(inputValues.some(inputValue => inputValue.length <= 1) == true) {
-        errorMessageString.classList.remove("error-message-string-hidden");
-        errorMessageString.textContent = "Error: each name must contain at least two letters!";
-        return;
+    } else { // gather form entries, save to session storage, and go to raffle page
+        const finalInputValues = [];
+        allInputsArray.forEach(input => {
+            if(input.value != undefined && input.value != null && input.value != "") {
+                finalInputValues.push(input.value);
+            }
+        });
+        const entriesObj = {"raffleEntries": ""};
+        const valueArray = [];
+        for(let i = 0; i < finalInputValues.length; i++ ) {
+              valueArray.push({firstName: finalInputValues[i], entryID: i + 1});
+        }
+        entriesObj.raffleEntries = valueArray;
+        //Save form data to session storage. It only accepts strings.
+        sessionStorage.setItem("raffleEntries", JSON.stringify(entriesObj));
+        window.location.assign("./raffle/raffle.html");
     }
-    //No duplicates?    
-    const dupeCountsObj = {};
-    inputValues.forEach(value => {dupeCountsObj[value.toLowerCase()] = (dupeCountsObj[value.toLowerCase()] || 0) + 1});
-    const dupeCountsArray = Object.values(dupeCountsObj);
-    const isDupe = dupeCountsArray.some(count => count > 1 );
-    if(isDupe) {
-        errorMessageString.classList.remove("error-message-string-hidden");
-        errorMessageString.textContent = "Error: no duplicate entries allowed!";
-        return;
-    } else {
-          const entriesObj = {"raffleEntries": ""};
-          const valueArray = [];
-          for(let i = 0; i < inputValues.length; i++ ) {
-              valueArray.push({firstName: inputValues[i], entryID: i + 1});
-          }
-          entriesObj.raffleEntries = valueArray;
-          //Save form data to session storage. It only accepts strings.
-          sessionStorage.setItem("raffleEntries", JSON.stringify(entriesObj));
-          window.location.assign("./raffle/raffle.html");
 
-    }
 }
 
-allInputs.forEach(input => input.addEventListener("input", () => recolorSubmitButton()));
+allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForDuplicates()));
 submitButton.addEventListener("click", () => submitEntries());
