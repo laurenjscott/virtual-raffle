@@ -15,7 +15,7 @@ const checkInputForDuplicates = () => {
         }
     })
     //If current input value matches one of the other input values, set custom validity message.
-    if(otherInputValuesArray.some(input => currentInput.value.toLowerCase() == input.value.toLowerCase())) {
+    if(otherInputValuesArray.some(input => currentInput.value.toLowerCase() == input.value.toLowerCase()) && currentInput.value != "") {
         currentInput.setCustomValidity("There is a duplicate name entry!");
         console.log(currentInput.validity);
     } else {
