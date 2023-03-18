@@ -32,14 +32,18 @@ const submitEntries = () => {
                 const errorMessageString = "Name must contain at least 1 letter and should be at least 2 characters long. No leading or trailing spaces either.";
                 errorMessagePara.textContent = errorMessageString;
                 errorMessagePara.classList.remove("error-message-string-hidden");
-                input.focus();
+//                input.focus();
+                input.classList.add("invalid-input");
                 errorCount++;
+                window.scroll(0, 0);
         }   else if (input.validity.customError == true) { // duplicate entries
                 const errorMessageString = input.validationMessage;
                 errorMessagePara.textContent = errorMessageString;
                 errorMessagePara.classList.remove("error-message-string-hidden");
-                input.focus();
+//                input.focus();
+                input.classList.add("invalid-input");
                 errorCount++;
+                window.scroll(0, 0);
         }   else { // not a custom error from "dupe" error or a pattern mismatch.  If error, it's from "at least 2 entries" contraint
                 const allInputValues = [];
                 allInputsArray.forEach(input => {
@@ -51,8 +55,13 @@ const submitEntries = () => {
                     const errorMessageString = "At least 2 name entries are required."
                     errorMessagePara.textContent = errorMessageString;
                     errorMessagePara.classList.remove("error-message-string-hidden");
-                    input.focus();
+//                    input.focus();
+                    input.classList.add("invalid-input");
                     errorCount++;
+                    window.scroll(0, 0);
+                } else {
+                    input.classList.remove("invalid-input");
+
                 }
             
             }
@@ -80,6 +89,8 @@ const submitEntries = () => {
     }
 
 }
+
+
 
 allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForDuplicates()));
 submitButton.addEventListener("click", () => submitEntries());
