@@ -25,3 +25,8 @@ input {
 .error-message-string-hidden {
     visibility: hidden;
 }
+
+/*Created to created the look of a focused inout without calling the focus method on the input using JS. When using focus and if the user is viewing from a mobile a device, the mobile keyboard obstructs the validation error string at the top of the screen */
+.invalid-input {
+    border: 4px solid green;
+}
