@@ -32,7 +32,6 @@ const submitEntries = () => {
                 const errorMessageString = "Name must contain at least 1 letter and should be at least 2 characters long. No leading or trailing spaces either.";
                 errorMessagePara.textContent = errorMessageString;
                 errorMessagePara.classList.remove("error-message-string-hidden");
-//                input.focus();
                 input.classList.add("invalid-input");
                 errorCount++;
                 window.scroll(0, 0);
@@ -40,7 +39,6 @@ const submitEntries = () => {
                 const errorMessageString = input.validationMessage;
                 errorMessagePara.textContent = errorMessageString;
                 errorMessagePara.classList.remove("error-message-string-hidden");
-//                input.focus();
                 input.classList.add("invalid-input");
                 errorCount++;
                 window.scroll(0, 0);
@@ -55,10 +53,12 @@ const submitEntries = () => {
                     const errorMessageString = "At least 2 name entries are required."
                     errorMessagePara.textContent = errorMessageString;
                     errorMessagePara.classList.remove("error-message-string-hidden");
-//                    input.focus();
-                    input.classList.add("invalid-input");
-                    errorCount++;
-                    window.scroll(0, 0);
+                    if(input.value != "") { // prevents the first input in the form from throwing an error when user enters data in inputs 2 - 5 and there is only 1 input with a value on the form.
+                        input.classList.add("invalid-input");
+                        errorCount++;
+                        window.scroll(0, 0);
+                    }
+                    
                 } else {
                     input.classList.remove("invalid-input");
 
