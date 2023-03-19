@@ -13,6 +13,7 @@ form * {
 input {
     padding: 1rem 1rem;
     font-size: inherit;
+    border: 1px solid gray;
 }
 
 
