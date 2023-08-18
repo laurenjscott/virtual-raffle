@@ -14,12 +14,13 @@
         <h1>Virtual Raffle</h1>
         <h2>Please enter at least two unique names for the raffle.</h2>
         <form action="">
-            <p class="error-message-string error-message-string-hidden" >Hello World</p>
-            <input type="text" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
-            <input type="text" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
-            <input type="text" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
-            <input type="text" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
-            <input type="text" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
+            <p class="error-message-string error-message-string-hidden"></p>
+            <!--Regex pattern: String must begin with at least 1 non-whitespace character; String must end with at least 1 non-whitespace character; String must NOT only contain number characters; String must contain at least 2 characters-->
+            <input type="text" name="raffle-participant-name" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
+            <input type="text" name="raffle-participant-name" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
+            <input type="text" name="raffle-participant-name" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
+            <input type="text" name="raffle-participant-name" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
+            <input type="text" name="raffle-participant-name" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}">
             <button type="button" class="action-button">Add Entries</button>
         </form>
     </body>
