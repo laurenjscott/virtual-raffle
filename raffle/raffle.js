@@ -45,7 +45,7 @@ if (localStorageWinners) {
 
 
 //render list of entries
-entries.raffleEntries.forEach((item) => {
+entries.forEach((item) => {
 	let li = document.createElement("li");
 	li.setAttribute("data-name", item.firstName);
 	li.textContent = item.firstName;
@@ -107,7 +107,7 @@ noCancelButton.addEventListener("click", () => {
 
 function pickWinner() {
 	//add a randomNumber key and value to each raffle entry object
-	entries.raffleEntries.forEach((item) => {
+	entries.forEach((item) => {
 		item.randomNumber = Math.random();
 	});
 	//add previous winner to previous winner list, if applicable
@@ -122,7 +122,7 @@ function pickWinner() {
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
 	//Who has the lowest random number? Tell it to the console.
-	currentWinner = entries.raffleEntries.reduce((previousMinEntry, entry) =>
+	currentWinner = entries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
 			: entry
@@ -198,7 +198,7 @@ function clearStorageButtonFunction () {
         if (dialog.classList.contains("unsupported")) {
             checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
         } else {
-            setTimeout(() =>  {dialog.showModal();}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
+            setTimeout(() =>  {dialog.showModal()}, 500); // a delay is needed to avoid "bug" where double-clicking on this button causes "double tap to zoom" is be enabled on iOS when the dialog is opened. Touch action rules applied in CSS are ignored as long as the dialog is open.
 
         }    
 }
@@ -217,5 +217,7 @@ function showRecentRaffleTimestamp () {
     console.log(recentRaffleEntryTimestampUSFormatted);
     //Add "Raffle conducted " + dateVariable to last paragraph in Raffle Entries section
     recentRaffleTimestampParagraph.textContent = `Raffle conducted on ${recentRaffleEntryTimestampUSFormatted}`;
-        
+       
 }
+
+
