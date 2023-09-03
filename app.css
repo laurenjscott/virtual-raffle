@@ -108,6 +108,13 @@ dialog button {
     width: max-content;
 }
 
+dialog button:focus {
+    outline: 2px solid black;
+    border-radius: 4px;
+
+}
+
+
 dialog button:first-of-type {
 	color: var(--black);
 }
