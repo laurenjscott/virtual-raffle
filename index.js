@@ -26,7 +26,7 @@ const checkInputForDuplicates = (event) => {
         errorMessagePara.classList.add("error-message-string-hidden");
         currentInput.classList.remove("invalid-input");
 
-    } else { // A custom validation error other than duplicate values is occuring, so don't empty mess with the validity message. Or there was a dupe but the current input's value is empty so the dupe is 1 or more other empty inputs. That will be trapped for separately. 
+    } else { // A custom validation error other than duplicate values is occuring, so don't mess with the validity message. Or there was a dupe but the current input's value is empty so the "dupe" is 1 or more other empty inputs. That will be trapped for separately. 
         return;
     }
 }
