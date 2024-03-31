@@ -1,8 +1,3 @@
-body {
-    overflow: visible;
-    margin: 0;
-}
-
 header {
 	z-index: 999;
 }
@@ -23,11 +18,6 @@ ul {
 	padding: 0;
 }
 
-
-main section p {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-}
 
 aside {
     padding-bottom: 1rem;
