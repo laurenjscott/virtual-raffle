@@ -47,8 +47,10 @@ if (localStorageWinners) {
 //render list of entries
 entries.forEach((item) => {
 	let li = document.createElement("li");
+    let span = document.createElement("span");
 	li.setAttribute("data-name", item.firstName);
-	li.textContent = item.firstName;
+	span.textContent = item.firstName;
+    li.appendChild(span);
 	mainUl.appendChild(li);
 });
 
@@ -153,12 +155,12 @@ function highlightAndPush(currentWinner) {
 	//Local storage only accepts strings
 	localStorage.setItem("raffleWinners", JSON.stringify(allRaffleWinners));
 	//remove highlight from previous winner
-	if (document.querySelector("li.highlight") != null) {
-		document.querySelector("li.highlight").classList.remove("highlight");
+	if (document.querySelector("li span.highlight") != null) {
+		document.querySelector("li span.highlight").classList.remove("highlight");
 	}
 	//Finally, highlight the winner visually
 	document
-		.querySelector(`li[data-name='${currentWinner.firstName}']`)
+		.querySelector(`li[data-name='${currentWinner.firstName}'] span`)
 		.classList.add("highlight");
 }
 

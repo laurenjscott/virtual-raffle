@@ -1,10 +1,13 @@
 html {
     font-family: "Open Sans", sans-serif;
     box-sizing: border-box;
-    --burgundy: #AB0552;
-    --purple: #B175FF;
-    --cream: #EFEBE2;
-    --black: #07040A;
+    --lightgray: #D3D3D3;
+    --seal-brown: #6B2B07;
+    --engineering-orange: #B80D09;
+    --smoky-black: #141301;
+    --aquamarine: #14F2B2;
+    --white: #FFFFFF;
+    --azure-web: #DCF3F9;
     touch-action: manipulation;
 
 }
@@ -14,8 +17,17 @@ html {
     font-family: inherit;
 }
 
+body {
+    background: linear-gradient(180deg, var(--white) 0%, var(--azure-web) 100%);
+    min-height: 100vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+
+
 a {
-    color: var(--burgundy);
+    color: var(--seal-brown);
     padding: 1rem 1rem 1rem 0;
 }
 
@@ -29,27 +41,25 @@ button {
     border-radius: 0.5rem;
     border: 0;
     font-size: 1rem;
-/*    touch-action: none; */
     width: 300px;
     
 }
 
-button.action-button {
-    background-color: var(--purple);
-}
-
-button.action-button:not([disabled]):hover {
-    background-color: var(--cream);
-    color: var(--black);
-}
-
-button.destructive-button{
-    background-color: var(--burgundy);
-}
-
-button.destructive-button:not([disabled]):hover {
+button:not([disabled]):hover {
     border-radius: 0;
 }
+
+button.action-button {
+    background-color: var(--aquamarine);
+    color: var(--smoky-black);
+    font-weight: bold;
+}
+
+
+button.destructive-button{
+    background-color: var(--engineering-orange);
+}
+
 
 button[disabled], button:disabled {
     opacity: 0.5;
@@ -109,14 +119,14 @@ dialog button {
 }
 
 dialog button:focus {
-    outline: 2px solid black;
+    outline: 2px solid var(--smoky-black);
     border-radius: 4px;
 
 }
 
 
 dialog button:first-of-type {
-	color: var(--black);
+	color: var(--smoky-black);
 }
 
 dialog button:last-child {
