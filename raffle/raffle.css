@@ -1,6 +1,16 @@
+body {
+    overflow: visible;
+    margin: 0;
+}
+
 header {
-	background-color: #fff;
 	z-index: 999;
+}
+
+header a {
+    display: block;
+    text-align: left;
+    margin-left: 0.5rem;
 }
 
 h2 {
@@ -13,8 +23,14 @@ ul {
 	padding: 0;
 }
 
-main li {
-	width: max-content;
+
+main section p {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+aside {
+    padding-bottom: 1rem;
 }
 
 button {
