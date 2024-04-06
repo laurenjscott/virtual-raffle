@@ -13,11 +13,11 @@
     <body>
         <h1>Virtual Raffle</h1>
         <form action="">
-            <p id="input-error" class="error-message-string error-message-string-hidden" aria-live="assertive"></p>
-            <!--Regex pattern: String must begin with at least 1 non-whitespace character; String must end with at least 1 non-whitespace character; String must NOT only contain number characters; String must contain at least 2 characters-->
             
             <fieldset>
                 <legend>Please enter at least two unique names for the raffle.</legend>
+                <p id="input-error" class="error-message-string error-message-string-hidden" aria-live="assertive"></p>
+                <!--Regex pattern: String must begin with at least 1 non-whitespace character; String must end with at least 1 non-whitespace character; String must NOT only contain number characters; String must contain at least 2 characters-->
                 <label for="raffle-participant-1">Participant 1</label>
                 <input type="text" id="raffle-participant-1" name="raffle-participant-1" pattern="(?=^\S+.*)(?=.*\S+$)(?!^\d{1,}$).{2,}" aria-describedby="input-error">
             
