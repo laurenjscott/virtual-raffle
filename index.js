@@ -75,7 +75,18 @@ const submitEntries = () => {
     const allInputsArray = [...allInputsObject];
     const notValidInput = allInputsArray.some(input => input.validity.valid == false);
     const notEnoughNames = checkInputForZeroOrOneName();
-    if(notValidInput || notEnoughNames) { // if non of the inputs are valid, return early
+    if(notValidInput || notEnoughNames) { // if none of the inputs are valid
+        if(notEnoughNames) {
+            //give focus to the first empty input. This will trigger the screen reader to read out the error message
+            const firstEmptyInputIndex = allInputsArray.findIndex(input => input.value == "");
+            const firstEmptyInput = [...document.querySelectorAll(`input`)][firstEmptyInputIndex];
+            firstEmptyInput.focus();
+        } else {
+            //find the fist invalid input and focus it. This will trigger the screen reader to read out the error message
+            const firstInvalidInputIndex = allInputsArray.findIndex(input => input.validity.valid == false);
+            const firstInvalidInput = [...document.querySelectorAll(`input`)][firstInvalidInputIndex];
+            firstInvalidInput.focus();
+        }
         return;
     } else { // gather form entries, save to session storage, and go to raffle page
         const formData = new FormData(document.querySelector("form"));
