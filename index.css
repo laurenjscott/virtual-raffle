@@ -1,9 +1,13 @@
-form {
+form, fieldset {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
     
+}
+
+form {
+    margin-bottom: 2rem;
 }
 
 form * {
@@ -12,8 +16,21 @@ form * {
     width: 100%;
 }
 
-label {
+fieldset {
+    border: none; 
+    margin: 0;
+    padding: 0;
+}
+
+legend {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+}
+
+label, input {
     text-align: left;
+    display: block;
 }
 
 input {
