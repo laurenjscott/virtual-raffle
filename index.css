@@ -12,11 +12,14 @@ form * {
     width: 100%;
 }
 
+label {
+    text-align: left;
+}
+
 input {
     padding: 1rem 1rem;
     font-size: inherit;
     border: 1px solid var(--lightgray);
-    text-align: center;
     border-radius: 0.25rem;
     box-shadow: 0px 3px 6px #D3D3D329; /* --lightgray with an alpha channel of .29*/
 }
