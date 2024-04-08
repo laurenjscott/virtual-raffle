@@ -36,13 +36,13 @@ button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    color: #FFF;
     cursor: pointer;
     padding: 2rem;
     border-radius: 0.5rem;
     border: 0;
     font-size: 1rem;
-    width: 300px;
+    font-weight: bold;
+    
     
 }
 
@@ -71,67 +71,6 @@ button[disabled], button:disabled {
 
 i {
     margin-right: 0.5rem;
-}
-
-dialog {
-	padding-top: 3rem;
-	padding-bottom: 3rem;
-	border: 1px solid #707070;
-    background-color: #FFF;
-    
-}
-
-dialog::backdrop {
-    background-color: rgba(0,0,0,0.4);
-}
-
-button, button[disabled], button:disabled, dialog, dialog::backdrop {
-    touch-action: none; /*prevents zoom from happening when a user triple clicks on a element on a smartphone */
-}
-
-/*applies only to browsers that don't currently support <dialog>*/
-dialog.unsupported {
-    width: 100%;
-    height: 100%;
-
-}
-
-/*applies only to browsers that don't currently support <dialog>*/
-dialog.unsupported.hidden { 
-	display: none;
-}
-
-/*applies only to browsers that don't currently support <dialog>*/
-dialog.unsupported.display { 
-    background-color: rgba(0,0,0,0.4);
-    border: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-dialog button {
-	padding: 0.25rem;
-    width: max-content;
-}
-
-dialog button:focus {
-    outline: 2px solid var(--smoky-black);
-    border-radius: 4px;
-
-}
-
-
-dialog button:first-of-type {
-	color: var(--smoky-black);
-}
-
-dialog button:last-child {
-	background: #0071e3;
 }
 
 
