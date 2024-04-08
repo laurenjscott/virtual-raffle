@@ -24,20 +24,70 @@ aside {
 }
 
 button {
-	margin-top: 0.5rem;
+/*	margin-top: 0.5rem;*/
+}
+
+body > button {
+    width: 100%;
+    display: block;
+    margin-top: 2rem;
+}
+
+body > button:first-of-type {
+    color: #FFF;
 }
 
 
-dialog.unsupported.display form {
-    background-color: #FFF;
-    border: 1px solid #707070;
-    padding: 3rem 1rem;
-    width: fit-content; 
+
+dialog {
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0;
 }
 
+
+dialog::backdrop {
+    background-color: rgba(0,0,0,0.4);
+}
+
+dialog form {
+    padding: 0 0.5rem 2rem;
+}
 
 dialog form p {
-    margin: 0;
+    margin-bottom: 2.5rem;
+}
+
+dialog form button {
+    width: 100%;
+}
+
+dialog form button:first-of-type { /* destructive button */
+    background-color: #b80c09;
+	color: #fff;
+}
+
+dialog form button:last-of-type { /* destructive button */
+    background-color: aquamarine;
+}
+
+dialog form button:last-of-type { /* cancel button */
+    background-color: aquamarine;
+    margin-top: 2rem;
+}
+
+button, button[disabled], button:disabled, dialog, dialog::backdrop {
+    touch-action: none; /* prevents zoom from happening when a user triple clicks on a element on a smartphone  */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+.dialog-header {
+	display: flex;
+	justify-content: center;
+	padding: 2rem 0;
+	background-color: azure;
 }
     
 
@@ -50,5 +100,12 @@ dialog form p {
     font-style: italic;
 }
 
+@media (min-width: 700px) {
+    body > button {
+        margin-top: 0;
+        display: inline-block;
+        width: 300px;
+    }
+}
 
 
