@@ -69,11 +69,11 @@ dialog form button:first-of-type { /* destructive button */
 
 dialog form button:last-of-type { /* destructive button */
     background-color: aquamarine;
-    margin-top: 2rem;
 }
 
 dialog form button:last-of-type { /* cancel button */
-    background-color: #18f2b2;
+    background-color: aquamarine;
+    margin-top: 2rem;
 }
 
 button, button[disabled], button:disabled, dialog, dialog::backdrop {
