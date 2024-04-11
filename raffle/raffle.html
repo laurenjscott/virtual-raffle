@@ -32,15 +32,16 @@
 		<h2>Previous Winners: 0</h2>
 		<ul></ul>
 	</aside>
-	<dialog>
-        <section class="dialog-header">
+	<dialog aria-labelledby="clear-winners-dialog-title"> <!--As of Firefox 124.0.2 , VoiceOver (on macOS 12.7.2) doesn't read out text mapped for aria-labelledby. So h2 is not read-->
+        <section class="dialog-header" aria-hidden="true">
             <i class="fas fa-trash fa-3x"></i>
         </section>
 		<form method="dialog">
-            <h2>Clear Previous Winners?</h2>
-            <p>Are you sure that you want to clear previous winners? This is a permanent action.</p>
+            <h2 id="clear-winners-dialog-title">Clear Previous Winners?</h2> 
+            <p aria-live="polite">Are you sure that you want to clear previous winners? This is a permanent action.</p><!--VoiceOver (on macOS 12.7.2) doesn't read out text mapped for aria-describedby on all desktop browsers (Firefox 124.0.2, Safari 12.7.2, Chrome 123.0.6312.122). So p element is not read. This is a known bug (https://bugs.webkit.org/show_bug.cgi?id=262895). Workaround is adding aria-live-->
 			<button>Yes, clear previous winners</button>
 			<button autofocus>No, cancel</button>
+
 		</form>
 
 	</dialog>	
