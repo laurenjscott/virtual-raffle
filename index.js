@@ -28,15 +28,11 @@ function checkInputForValidationErrors(event, allInputsObject) { //if input isn'
     //Will contain input's Validity interface as an object
     const validityStateObj = {};
     
-    //First check for an empty input. If it is, remove "user-valid-not-blank" class and exit function
-    if(currentInput.value == "") {
-        currentInput.classList.remove("user-valid-not-blank");
-    }
-    
 
     for (let state in validity) {
         validityStateObj[state] = validity[state];
     }
+    
     //Find first key (error condition state) where the value is true that is not the "valid" state or "customError" state
     const firstError = Object.keys(validityStateObj).find((state) => validityStateObj[state] == true && state != "valid" && state != "customError");
     if(firstError != undefined) { // invalid input data not related to dupes
@@ -62,6 +58,8 @@ function checkInputForValidationErrors(event, allInputsObject) { //if input isn'
             errorMessagePara.classList.add("error-description-hidden");
             if(currentInput.value != "") {
                 currentInput.classList.add("user-valid-not-blank");
+            } else {
+                currentInput.classList.remove("user-valid-not-blank");
             }
         }
     } 
