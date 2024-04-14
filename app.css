@@ -25,6 +25,10 @@ body {
     padding: 0.5rem;/* Added to prevent the h1's top margin from overflowing the body element when using 100vh for height.This is due to margin collapsing(https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing). Otherwise, a vertical toolbar will appear even though the body's actual content does overflow the viewport.*/
 }
 
+h1 {
+    margin-top: 3rem;
+}
+
 
 
 a {

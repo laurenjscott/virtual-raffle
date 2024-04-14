@@ -1,10 +1,76 @@
-const allInputsObject = document.querySelectorAll("input");
+window.addEventListener("load", addValidationListeners);
 
-const checkInputForDuplicates = (event) => {
-    const errorMessagePara = document.querySelector("form p");
+/*****************************Parent Function****************************************/
+
+function addValidationListeners() {
+    const allInputsObject = document.querySelectorAll("input");
+    const submitButton = document.querySelector("button");
+    allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForValidationErrors(event, allInputsObject)));
+    // Add validation listener to form submit button
+    submitButton.addEventListener("click", () => submitEntries(allInputsObject));
+}
+
+
+/*****************************Child Functions****************************************/
+    
+
+function checkInputForValidationErrors(event, allInputsObject) { //if input isn't valid, display appropriate error message
+    
+    const currentInput = event.target;
+    const validity = currentInput.validity;
+    const errorMessagePara = currentInput.previousElementSibling;
+    const validationMessagesObj = { //more messages can be added later. This is being done to make things more modular.
+        errorMessages: {
+            patternMismatch: "Name must contain at least 1 letter and should be at least 2 characters long. No leading or trailing spaces either.",
+        }
+	
+    };
+    //Will contain input's Validity interface as an object
+    const validityStateObj = {};
+    
+
+    for (let state in validity) {
+        validityStateObj[state] = validity[state];
+    }
+    
+    //Find first key (error condition state) where the value is true that is not the "valid" state or "customError" state
+    const firstError = Object.keys(validityStateObj).find((state) => validityStateObj[state] == true && state != "valid" && state != "customError");
+    if(firstError != undefined) { // invalid input data not related to dupes
+        //If there is an error, no need to check for dupes at this time.
+        //Fetch appropriate message
+        const errorMessageString = validationMessagesObj.errorMessages[firstError];
+        //Add errorMessageString to error paragraph and display it
+        errorMessagePara.querySelector("span").textContent = errorMessageString;
+        errorMessagePara.classList.remove("error-description-hidden");
+        currentInput.classList.remove("user-valid-not-blank");
+
+    } else { //valid input data
+        //Check for dupes
+        const dupeFound = checkInputForDuplicates(currentInput, allInputsObject);
+        //If dupes, display appropriate error message
+        if(dupeFound) {
+            errorMessagePara.querySelector("span").textContent = currentInput.validationMessage;
+            errorMessagePara.classList.remove("error-description-hidden");
+            currentInput.classList.remove("user-valid-not-blank");
+
+        } else { // If no dupes, hide error message
+            errorMessagePara.querySelector("span").textContent = "";
+            errorMessagePara.classList.add("error-description-hidden");
+            if(currentInput.value != "") {
+                currentInput.classList.add("user-valid-not-blank");
+            } else {
+                currentInput.classList.remove("user-valid-not-blank");
+            }
+        }
+    } 
+    
+}
+
+
+function checkInputForDuplicates(currentInput, allInputsObject) {
     const allInputsArray = [...allInputsObject];
     const otherInputValuesArray = []; //used to collect values of ALL inputs that are NOT the current input element
-    const currentInput = event.target; //get input element with the current focus
+    
     //Input elements that are NOT currentInput: push input values into an array
     allInputsArray.forEach(input => {
         if(input != currentInput) {
@@ -13,68 +79,36 @@ const checkInputForDuplicates = (event) => {
     })
     //If current input value matches one of the other input values, set custom validity message.
     const dupeFound = otherInputValuesArray.some(input => currentInput.value.toLowerCase() == input.value.toLowerCase());
+    console.info(dupeFound);
     if(dupeFound && currentInput.value != "") {
-        currentInput.setCustomValidity("There is a duplicate name entry!");
-        const errorMessageString = "There is a duplicate name entry!";
-        errorMessagePara.textContent = errorMessageString;
-        errorMessagePara.classList.remove("error-message-string-hidden");
-        currentInput.classList.add("invalid-input");
-        window.scroll(0, 0);
-    } else if (currentInput.validationMessage == "There is a duplicate name entry!" || currentInput.validationMessage == "") { //Validation is now valid or it was already valid
-        currentInput.setCustomValidity("");
-        errorMessagePara.textContent = "";
-        errorMessagePara.classList.add("error-message-string-hidden");
-        currentInput.classList.remove("invalid-input");
-
-    } else { // A custom validation error other than duplicate values is occuring, so don't mess with the validity message. Or there was a dupe but the current input's value is empty so the "dupe" is 1 or more other empty inputs. That will be trapped for separately. 
-        return;
-    }
-}
-
-const checkInputForPatternMismatch = (event) => {
-    const currentInput = event.target;
-    const errorMessagePara = document.querySelector("form p");
-    const errorMessageString = "Name must contain at least 1 letter and should be at least 2 characters long. No leading or trailing spaces either.";
-    if(event.target.validity.patternMismatch == true) { //regex pattern in HTML doesn't match
-        errorMessagePara.textContent = errorMessageString;
-        errorMessagePara.classList.remove("error-message-string-hidden");
-        currentInput.classList.add("invalid-input");
-        window.scroll(0, 0);
-    } else if(currentInput.validationMessage == `${errorMessageString}` || currentInput.validationMessage == "") {
-        errorMessagePara.textContent = "";
-        errorMessagePara.classList.add("error-message-string-hidden");
-        currentInput.classList.remove("invalid-input");
-
-    } else {
-        return;
-    }
-       
-}
-
-
-const checkInputForZeroOrOneName = () => { //check if form contains less than 2 names
-    const allInputsArray = [...allInputsObject];
-    const errorMessagePara = document.querySelector("form p");
-    const countNonEmptyInputs = allInputsArray.filter(input => input.value !== "").length;
-    const errorMessageString = "At least 2 names are required.";
-    if(countNonEmptyInputs < 2) {
-        errorMessagePara.textContent = errorMessageString;
-        errorMessagePara.classList.remove("error-message-string-hidden");
-        window.scroll(0, 0);
+        currentInput.setCustomValidity("There is a duplicate entry.");
         return true;
-    } else if(allInputsArray.every(input => input.validity.valid == true))   { 
-        errorMessagePara.textContent = "";
-        errorMessagePara.classList.add("error-message-string-hidden");
     } else {
+        currentInput.setCustomValidity("");
+
+    } 
+}
+
+function checkInputForZeroOrOneName(allInputsObject) { //check if form contains less than 2 names
+    const allInputsArray = [...allInputsObject];
+    const form = document.querySelector("form"); 
+    const countNonEmptyInputs = allInputsArray.filter(input => input.value !== "").length;
+    if(countNonEmptyInputs < 2) {
+        window.scroll(0, 0);
+        //change legend text color to red
+        form.classList.add("invalid-entry-count");        
+        return true;
+    } else {
+        form.classList.remove("invalid-entry-count"); 
         return;
     }
 }
 
 
-const submitEntries = () => {
+function submitEntries(allInputsObject) {
     const allInputsArray = [...allInputsObject];
     const notValidInput = allInputsArray.some(input => input.validity.valid == false);
-    const notEnoughNames = checkInputForZeroOrOneName();
+    const notEnoughNames = checkInputForZeroOrOneName(allInputsObject);
     if(notValidInput || notEnoughNames) { // if none of the inputs are valid
         if(notEnoughNames) {
             //give focus to the first empty input. This will trigger the screen reader to read out the error message
@@ -82,7 +116,7 @@ const submitEntries = () => {
             const firstEmptyInput = [...document.querySelectorAll(`input`)][firstEmptyInputIndex];
             firstEmptyInput.focus();
         } else {
-            //find the fist invalid input and focus it. This will trigger the screen reader to read out the error message
+            //find the first invalid input and focus it. This will trigger the screen reader to read out the error message
             const firstInvalidInputIndex = allInputsArray.findIndex(input => input.validity.valid == false);
             const firstInvalidInput = [...document.querySelectorAll(`input`)][firstInvalidInputIndex];
             firstInvalidInput.focus();
@@ -107,13 +141,5 @@ const submitEntries = () => {
 
 }
 
-
-allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForDuplicates(event)));
-
-allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForPatternMismatch(event)));
-
-
-const submitButton = document.querySelector("button");
-submitButton.addEventListener("click", () => submitEntries());
 
 
