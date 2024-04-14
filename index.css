@@ -7,7 +7,6 @@ form, fieldset {
 
 form {
     margin-bottom: 2rem;
-/*    gap: 1rem;*/
 
 }
 
@@ -67,6 +66,7 @@ input:last-of-type {
 
 label + p {
     margin-bottom: 0.5rem;
+    margin-top: 0;
     text-align: left;
     color: var(--engineering-orange);
 }
@@ -84,35 +84,7 @@ input.user-valid-not-blank {
 }
 
 
-
-
-
-
-
-.error-message-string {
-    color: var(--engineering-orange);
-    font-weight: bold;
-    margin: 0;
+.error-description-hidden {
+    display: none;
 }
 
-.error-message-string-hidden {
-    visibility: hidden;
-}
-
-/*Created to create the look of a focused input without calling the focus method on the input using JS. When using focus and if the user is viewing from a mobile device, the mobile keyboard obstructs the validation error string at the top of the screen */
-.invalid-input {
-    border: 4px solid var(--engineering-orange);
-}
-
-
-.error-description {
-    margin: 0;
-}
-
-/*
-@media (min-width: 500px) {
-    button.action-button {
-       margin-top: 3rem;
-    }
-}
-*/
