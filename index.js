@@ -99,6 +99,7 @@ function checkInputForZeroOrOneName(allInputsObject) { //check if form contains 
         form.classList.add("invalid-entry-count");        
         return true;
     } else {
+        form.classList.remove("invalid-entry-count"); 
         return;
     }
 }
