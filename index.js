@@ -105,9 +105,8 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
         }
     });
     
-    //Filter to only show inputs with values that match inputValue
-    const dupeInputsArray = otherInputValuesArray.filter(input => input.value == inputValue && inputValue != "");
-    console.info(dupeInputsArray);
+    //Filter to only show inputs with values that match inputValue. I use toLowercase() here to make sure entries like "Ian" and "ian" are considered duplicates
+    const dupeInputsArray = otherInputValuesArray.filter(input => input.value.toLowerCase() == inputValue.toLowerCase() && inputValue != "");
     
     //If only dupesInputsArray is empty, exit function immediately
     //Else if dupesInputsArray is contains more than 1 input element (multiple dupes), return function immediately
@@ -116,7 +115,7 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
         return;
     } else {
         dupeInputsArray[0].setCustomValidity(``);
-        dupeInputsArray[0].previousElementSibling.classList.add(`error-description-hidden`); //what if something else was invalid other than dupe?
+        dupeInputsArray[0].previousElementSibling.classList.add(`error-description-hidden`); //Dupe checks are only done after native pattern validation FYI. There will be no situation where a input is set as having both a patternMismatch and a dupe. If a patternMismatch, then no dupe check is made. So dupe inputs are already assumed to have valid pattern syntax at least.
         
     }
 }
