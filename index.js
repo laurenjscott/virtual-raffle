@@ -96,7 +96,6 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
     const inputValue = currentInput.value;
     const allInputsArray = [...allInputsObject];
     //find other inputs that have matching values
-//    const allInputsArray = [...document.querySelectorAll(input)];
     const otherInputValuesArray = []; //used to collect values of ALL inputs that are NOT the current input element
     
     //Input elements that are NOT currentInput: push input values into an array
@@ -107,9 +106,18 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
     });
     
     //Filter to only show inputs with values that match inputValue
-    const dupeInputs = otherInputValuesArray.filter(input => input.value == inputValue)
+    const dupeInputsArray = otherInputValuesArray.filter(input => input.value == inputValue && inputValue != "");
+    console.info(dupeInputsArray);
     
-    console.info(dupeInputs);
+    //If only dupesInputsArray is empty, exit function immediately
+    //Else if dupesInputsArray is contains more than 1 input element (multiple dupes), return function immediately
+    //Else, remove invalid condition from that one dupe input value
+    if(dupeInputsArray.length == 0 || dupeInputsArray.length > 1) {
+        console.info(`Ha!`);
+        return;
+    } else {
+        dupeInputsArray[0].setCustomValidity("");
+    }
 }
 
 function checkInputForZeroOrOneName(allInputsObject) { //check if form contains less than 2 names
