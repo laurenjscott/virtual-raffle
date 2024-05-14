@@ -111,12 +111,13 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
     
     //If only dupesInputsArray is empty, exit function immediately
     //Else if dupesInputsArray is contains more than 1 input element (multiple dupes), return function immediately
-    //Else, remove invalid condition from that one dupe input value
+    //Else, remove invalid condition from that one dupe input value. And hide UI validation message
     if(dupeInputsArray.length == 0 || dupeInputsArray.length > 1) {
-        console.info(`Ha!`);
         return;
     } else {
-        dupeInputsArray[0].setCustomValidity("");
+        dupeInputsArray[0].setCustomValidity(``);
+        dupeInputsArray[0].previousElementSibling.classList.add(`error-description-hidden`); //what if something else was invalid other than dupe?
+        
     }
 }
 
