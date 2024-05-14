@@ -110,12 +110,13 @@ function updateValidityforOtherDupeInputs(event, allInputsObject) {
     
     //If only dupesInputsArray is empty, exit function immediately
     //Else if dupesInputsArray is contains more than 1 input element (multiple dupes), return function immediately
-    //Else, remove invalid condition from that one dupe input value. And hide UI validation message
+    //Else, remove invalid condition from that one dupe input value. And hide UI validation message. And add green border
     if(dupeInputsArray.length == 0 || dupeInputsArray.length > 1) {
         return;
     } else {
         dupeInputsArray[0].setCustomValidity(``);
         dupeInputsArray[0].previousElementSibling.classList.add(`error-description-hidden`); //Dupe checks are only done after native pattern validation FYI. There will be no situation where a input is set as having both a patternMismatch and a dupe. If a patternMismatch, then no dupe check is made. So dupe inputs are already assumed to have valid pattern syntax at least.
+        dupeInputsArray[0].classList.add(`user-valid-not-blank`);
         
     }
 }
