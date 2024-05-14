@@ -6,6 +6,7 @@ function addValidationListeners() {
     const allInputsObject = document.querySelectorAll("input");
     const submitButton = document.querySelector("button");
     allInputsObject.forEach(input => input.addEventListener("input", () => checkInputForValidationErrors(event, allInputsObject)));
+    allInputsObject.forEach(input => input.addEventListener("beforeinput", () => updateValidityforOtherDupeInputs(event, allInputsObject)));
     // Add validation listener to form submit button
     submitButton.addEventListener("click", () => submitEntries(allInputsObject));
 }
@@ -79,7 +80,7 @@ function checkInputForDuplicates(currentInput, allInputsObject) {
     })
     //If current input value matches one of the other input values, set custom validity message.
     const dupeFound = otherInputValuesArray.some(input => currentInput.value.toLowerCase() == input.value.toLowerCase());
-    console.info(dupeFound);
+//    console.info(dupeFound);
     if(dupeFound && currentInput.value != "") {
         currentInput.setCustomValidity("There is a duplicate entry.");
         return true;
@@ -87,6 +88,37 @@ function checkInputForDuplicates(currentInput, allInputsObject) {
         currentInput.setCustomValidity("");
 
     } 
+}
+
+//Added 2024-05-13
+function updateValidityforOtherDupeInputs(event, allInputsObject) {
+    const currentInput = event.target;
+    const inputValue = currentInput.value;
+    const allInputsArray = [...allInputsObject];
+    //find other inputs that have matching values
+    const otherInputValuesArray = []; //used to collect values of ALL inputs that are NOT the current input element
+    
+    //Input elements that are NOT currentInput: push input values into an array
+    allInputsArray.forEach(input => {
+        if(input != currentInput) {
+            otherInputValuesArray.push(input);
+        }
+    });
+    
+    //Filter to only show inputs with values that match inputValue. I use toLowercase() here to make sure entries like "Ian" and "ian" are considered duplicates
+    const dupeInputsArray = otherInputValuesArray.filter(input => input.value.toLowerCase() == inputValue.toLowerCase() && inputValue != "");
+    
+    //If only dupesInputsArray is empty, exit function immediately
+    //Else if dupesInputsArray is contains more than 1 input element (multiple dupes), return function immediately
+    //Else, remove invalid condition from that one dupe input value. And hide UI validation message. And add green border
+    if(dupeInputsArray.length == 0 || dupeInputsArray.length > 1) {
+        return;
+    } else {
+        dupeInputsArray[0].setCustomValidity(``);
+        dupeInputsArray[0].previousElementSibling.classList.add(`error-description-hidden`); //Dupe checks are only done after native pattern validation FYI. There will be no situation where a input is set as having both a patternMismatch and a dupe. If a patternMismatch, then no dupe check is made. So dupe inputs are already assumed to have valid pattern syntax at least.
+        dupeInputsArray[0].classList.add(`user-valid-not-blank`);
+        
+    }
 }
 
 function checkInputForZeroOrOneName(allInputsObject) { //check if form contains less than 2 names
