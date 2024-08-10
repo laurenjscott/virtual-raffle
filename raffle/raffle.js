@@ -1,4 +1,5 @@
 window.addEventListener("load", () => {
+	renderRaffleEntriesList();
 	const pickWinnerButton = document.querySelector("button#refresh-button");
 	//"Yes" button in "Clear Winners" dialog
 	const yesClearStorageButton = document.querySelector("dialog button:first-of-type");
@@ -35,17 +36,11 @@ const asideH2 = document.querySelector("aside h2");
 const asideUl = document.querySelector("aside ul");
 const dialog = document.querySelector("dialog");
 
-//JSON data
-const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
 
 //Local storage stuff
 let localStorageWinners = localStorage.getItem("raffleWinners")
 	? JSON.parse(localStorage.getItem("raffleWinners"))
 	: undefined;
-let allRaffleWinners = [];
-if (localStorageWinners) {
-	allRaffleWinners = localStorageWinners;
-}
 
 
 /***************************************************************************/
@@ -61,17 +56,6 @@ if (localStorageWinners) {
 }
 
 
-//render list of entries
-entries.forEach((item) => {
-	const mainUl = document.querySelector("main ul");
-	let li = document.createElement("li");
-    let span = document.createElement("span");
-	li.setAttribute("data-name", item.firstName);
-	span.textContent = item.firstName;
-    li.appendChild(span);
-	mainUl.appendChild(li);
-});
-
 //render list of previous winners
 if (localStorageWinners) {
 	localStorageWinners.forEach((item) => {
@@ -83,7 +67,7 @@ if (localStorageWinners) {
 		}).format(new Date(item.winDate))}`;
 		asideUl.appendChild(li);
 	});
-	asideH2.textContent = `Previous Winners: ${allRaffleWinners.length}`;
+	asideH2.textContent = `Previous Winners: ${JSON.parse(localStorage.raffleWinners).length}`;
 }
 
 /**********************************************************/
@@ -97,6 +81,7 @@ if (window.HTMLDialogElement == undefined) {
 /************Functions**************************************/
 
 function pickWinner() {
+	const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
 	//add a randomNumber key and value to each raffle entry object
 	entries.forEach((item) => {
 		item.randomNumber = Math.random();
@@ -142,10 +127,10 @@ function pickWinner() {
 
 
 function highlightAndPush(currentWinner) {
-	//add currentWinner to allRaffleWinners array
-	allRaffleWinners.push(currentWinner);
+	const raffleWinners = JSON.parse(localStorage.getItem("raffleWinners") || []);
+	raffleWinners.push(currentWinner);
 	//Local storage only accepts strings
-	localStorage.setItem("raffleWinners", JSON.stringify(allRaffleWinners));
+	localStorage.setItem("raffleWinners", JSON.stringify(raffleWinners));
 	//remove highlight from previous winner
 	if (document.querySelector("li span.highlight") != null) {
 		document.querySelector("li span.highlight").classList.remove("highlight");
@@ -213,6 +198,19 @@ function showRecentRaffleTimestamp () {
     //Add "Raffle conducted " + dateVariable to last paragraph in Raffle Entries section
     recentRaffleTimestampParagraph.textContent = `Raffle conducted on ${recentRaffleEntryTimestampUSFormatted}`;
        
+}
+
+function renderRaffleEntriesList() {
+	const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
+	entries.forEach((item) => {
+		const mainUl = document.querySelector("main ul");
+		let li = document.createElement("li");
+		let span = document.createElement("span");
+		li.setAttribute("data-name", item.firstName);
+		span.textContent = item.firstName;
+		li.appendChild(span);
+		mainUl.appendChild(li);
+	});
 }
 
 function determineClearWinnersButtonState() {
