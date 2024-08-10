@@ -1,19 +1,39 @@
+window.addEventListener("load", () => {
+	const pickWinnerButton = document.querySelector("button#refresh-button");
+	//"Yes" button in "Clear Winners" dialog
+	const yesClearStorageButton = document.querySelector("dialog button:first-of-type");
+	//"No" button in "Clear Winners" dialog
+	const noCancelButton = document.querySelector("dialog button:last-child");
+	pickWinnerButton.addEventListener("click", pickWinner);
+	yesClearStorageButton.addEventListener("click", () => {
+		localStorage.removeItem("raffleWinners");
+		asideUl.innerHTML = "";
+		asideH2.textContent = `Previous Winners: 0`;
+    	if (dialog.classList.contains("unsupported")) {
+        	checkUnsupportedBrowser(hide = true);
+     	}
+		const clearStorageButton = document.querySelector("button#clear-storage-button")
+    	toggleClearStorageButtonState(clearStorageButton);
+
+	
+	});
+
+	noCancelButton.addEventListener("click", () => {
+    	if (dialog.classList.contains("unsupported")) {
+        	checkUnsupportedBrowser(hide = true);
+     	}
+	 	const clearStorageButton = document.querySelector("button#clear-storage-button")
+	 	toggleClearStorageButtonState(clearStorageButton);
+
+	});
+
+});
 
 /*Variables***********************************/
 //Elements
-const mainUl = document.querySelector("main ul");
 const asideH2 = document.querySelector("aside h2");
 const asideUl = document.querySelector("aside ul");
-const pickWinnerButton = document.querySelector("button#refresh-button");
-const clearStorageButton = document.querySelector(
-	"button#clear-storage-button"
-);
 const dialog = document.querySelector("dialog");
-const yesClearStorageButton = document.querySelector(
-	"dialog button:first-of-type"
-);
-const noCancelButton = document.querySelector(
-	"dialog button:last-child");
 
 //JSON data
 const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
@@ -32,15 +52,18 @@ if (localStorageWinners) {
 
 //Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
 if (localStorageWinners) {
+	const clearStorageButton = document.querySelector("button#clear-storage-button");
     clearStorageButton.addEventListener("click", clearStorageButtonFunction);
     clearStorageButton.removeAttribute("disabled");
 } else {
-     clearStorageButton.setAttribute("disabled", "true");
+	const clearStorageButton = document.querySelector("button#clear-storage-button");
+    clearStorageButton.setAttribute("disabled", "true");
 }
 
 
 //render list of entries
 entries.forEach((item) => {
+	const mainUl = document.querySelector("main ul");
 	let li = document.createElement("li");
     let span = document.createElement("span");
 	li.setAttribute("data-name", item.firstName);
@@ -69,35 +92,6 @@ if (localStorageWinners) {
 if (window.HTMLDialogElement == undefined) {
 	dialog.classList.add("unsupported", "hidden");
 }
-
-/*Other Event Listeners************************************/
-
-//Pick Winner button
-pickWinnerButton.addEventListener("click", () => {
-	pickWinner();
-});
-
-
-//"Yes" button in dialog
-yesClearStorageButton.addEventListener("click", () => {
-	localStorage.removeItem("raffleWinners");
-	asideUl.innerHTML = "";
-	asideH2.textContent = `Previous Winners: 0`;
-    if (dialog.classList.contains("unsupported")) {
-        checkUnsupportedBrowser(hide = true);
-     }
-    toggleClearStorageButtonState();
-	
-});
-
-//"No" button in dialog
-noCancelButton.addEventListener("click", () => {
-    if (dialog.classList.contains("unsupported")) {
-        checkUnsupportedBrowser(hide = true);
-     }
-    toggleClearStorageButtonState();
-
-});
 
 
 /************Functions**************************************/
@@ -137,7 +131,8 @@ function pickWinner() {
     
     //enables or disables "Clear Winners" button based on local storage value. Caveat: don't toggle local storage was previously empty prior to function execution
     if (JSON.parse(localStorage.raffleWinners).length > 1) {
-        toggleClearStorageButtonState();
+		const clearStorageButton = document.querySelector("button#clear-storage-button");
+        toggleClearStorageButtonState(clearStorageButton);
     }
     
     //Update Raffle Entries timestamp string
@@ -176,7 +171,7 @@ function checkUnsupportedBrowser (hide) {
 
 
 //Toggle state of and script action applied to "Clear Winners" button. Executed after clicking the "Clear Winners" button
-function toggleClearStorageButtonState () {
+function toggleClearStorageButtonState (clearStorageButton) {
     if (localStorage.raffleWinners) {
         if (clearStorageButton.hasAttribute("disabled")) {
             clearStorageButton.addEventListener("click", clearStorageButtonFunction);
@@ -218,6 +213,10 @@ function showRecentRaffleTimestamp () {
     //Add "Raffle conducted " + dateVariable to last paragraph in Raffle Entries section
     recentRaffleTimestampParagraph.textContent = `Raffle conducted on ${recentRaffleEntryTimestampUSFormatted}`;
        
+}
+
+function determineClearWinnersButtonState() {
+
 }
 
 
