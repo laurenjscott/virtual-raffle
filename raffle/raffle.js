@@ -14,7 +14,6 @@ const yesClearStorageButton = document.querySelector(
 );
 const noCancelButton = document.querySelector(
 	"dialog button:last-child");
-const recentRaffleTimestampParagraph = document.querySelector("main section p");
 
 //JSON data
 const entries = JSON.parse(sessionStorage.getItem("raffleEntries"));
@@ -27,10 +26,6 @@ let allRaffleWinners = [];
 if (localStorageWinners) {
 	allRaffleWinners = localStorageWinners;
 }
-
-//Used to save winner of raffle
-let currentWinner;
-
 
 
 /***************************************************************************/
@@ -113,22 +108,26 @@ function pickWinner() {
 		item.randomNumber = Math.random();
 	});
 	//add previous winner to previous winner list, if applicable
-	if (currentWinner) {
+	const previousWinner = sessionStorage.getItem("currentWinner") ? JSON.parse(sessionStorage.getItem("currentWinner")) : null;
+	if (previousWinner) {
 		let li = document.createElement("li");
-		li.setAttribute("data-name", currentWinner.firstName);
-		li.textContent = `${currentWinner.firstName}, ${Intl.DateTimeFormat("en-US", {
+		li.setAttribute("data-name", previousWinner.firstName);
+		li.textContent = `${previousWinner.firstName}, ${Intl.DateTimeFormat("en-US", {
 			dateStyle: "full",
 			timeStyle: "long"
-		}).format(new Date(currentWinner.winDate))}`;
+		}).format(new Date(previousWinner.winDate))}`;
 		asideUl.appendChild(li);
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
 	//Who has the lowest random number? Tell it to the console.
-	currentWinner = entries.reduce((previousMinEntry, entry) =>
+	const currentWinner = entries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
 			: entry
 	);
+	// //add a timestamp to raffle winner object
+	currentWinner.winDate = new Date();
+	sessionStorage.setItem("currentWinner", JSON.stringify(currentWinner));
 	console.log(
 		`Congratulations, ${currentWinner.firstName}! You are the raffle winner!`
 	);
@@ -148,8 +147,6 @@ function pickWinner() {
 
 
 function highlightAndPush(currentWinner) {
-	//add a timestamp to raffle winner object
-	currentWinner.winDate = new Date();
 	//add currentWinner to allRaffleWinners array
 	allRaffleWinners.push(currentWinner);
 	//Local storage only accepts strings
@@ -208,6 +205,7 @@ function clearStorageButtonFunction () {
 
 //When user clicks "Pick Winners" button, current timestamp is displayed under the Raffle Entries section
 function showRecentRaffleTimestamp () {
+	const recentRaffleTimestampParagraph = document.querySelector("main section p");
     //Save most recent entry's timestamp from session storage as a variable
     const previousRaffleWinners = JSON.parse(localStorage.raffleWinners);
     const recentRaffleEntryTimestamp = previousRaffleWinners[previousRaffleWinners.length - 1].winDate;
