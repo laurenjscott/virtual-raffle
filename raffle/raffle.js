@@ -1,14 +1,20 @@
 window.addEventListener("load", () => {
 	renderRaffleEntriesList();
+	renderPreviousWinnersList();
+	determineClearWinnersButtonState();
+	checkDialogBrowserSupport();
 	const pickWinnerButton = document.querySelector("button#refresh-button");
 	//"Yes" button in "Clear Winners" dialog
 	const yesClearStorageButton = document.querySelector("dialog button:first-of-type");
 	//"No" button in "Clear Winners" dialog
 	const noCancelButton = document.querySelector("dialog button:last-child");
+	const dialog = document.querySelector("dialog");
 	pickWinnerButton.addEventListener("click", pickWinner);
 	yesClearStorageButton.addEventListener("click", () => {
 		localStorage.removeItem("raffleWinners");
+		const asideUl = document.querySelector("aside ul");
 		asideUl.innerHTML = "";
+		const asideH2 = document.querySelector("aside h2");
 		asideH2.textContent = `Previous Winners: 0`;
     	if (dialog.classList.contains("unsupported")) {
         	checkUnsupportedBrowser(hide = true);
@@ -30,52 +36,6 @@ window.addEventListener("load", () => {
 
 });
 
-/*Variables***********************************/
-//Elements
-const asideH2 = document.querySelector("aside h2");
-const asideUl = document.querySelector("aside ul");
-const dialog = document.querySelector("dialog");
-
-
-//Local storage stuff
-let localStorageWinners = localStorage.getItem("raffleWinners")
-	? JSON.parse(localStorage.getItem("raffleWinners"))
-	: undefined;
-
-
-/***************************************************************************/
-
-//Enable or disable "ClearWinners" button. If enabled, add event listerner to button thst opens dialog element
-if (localStorageWinners) {
-	const clearStorageButton = document.querySelector("button#clear-storage-button");
-    clearStorageButton.addEventListener("click", clearStorageButtonFunction);
-    clearStorageButton.removeAttribute("disabled");
-} else {
-	const clearStorageButton = document.querySelector("button#clear-storage-button");
-    clearStorageButton.setAttribute("disabled", "true");
-}
-
-
-//render list of previous winners
-if (localStorageWinners) {
-	localStorageWinners.forEach((item) => {
-		let li = document.createElement("li");
-		li.setAttribute("data-name", item.firstName);
-		li.textContent = `${item.firstName}, ${Intl.DateTimeFormat("en-US", {
-			dateStyle: "full",
-			timeStyle: "long"
-		}).format(new Date(item.winDate))}`;
-		asideUl.appendChild(li);
-	});
-	asideH2.textContent = `Previous Winners: ${JSON.parse(localStorage.raffleWinners).length}`;
-}
-
-/**********************************************************/
-
-//Check if browser supports the dialog element
-if (window.HTMLDialogElement == undefined) {
-	dialog.classList.add("unsupported", "hidden");
-}
 
 
 /************Functions**************************************/
@@ -95,10 +55,12 @@ function pickWinner() {
 			dateStyle: "full",
 			timeStyle: "long"
 		}).format(new Date(previousWinner.winDate))}`;
+		const asideUl = document.querySelector("aside ul");
 		asideUl.appendChild(li);
+		const asideH2 = document.querySelector("aside h2");
 		asideH2.textContent = `Previous Winners: ${asideUl.childNodes.length}`;
 	}
-	//Who has the lowest random number? Tell it to the console.
+	//Who has the lowest random number?
 	const currentWinner = entries.reduce((previousMinEntry, entry) =>
 		Math.abs(previousMinEntry.randomNumber) < Math.abs(entry.randomNumber)
 			? previousMinEntry
@@ -107,9 +69,7 @@ function pickWinner() {
 	// //add a timestamp to raffle winner object
 	currentWinner.winDate = new Date();
 	sessionStorage.setItem("currentWinner", JSON.stringify(currentWinner));
-	console.log(
-		`Congratulations, ${currentWinner.firstName}! You are the raffle winner!`
-	);
+
 
 	//highlight winner and push winner to local storage
 	highlightAndPush(currentWinner);
@@ -127,7 +87,8 @@ function pickWinner() {
 
 
 function highlightAndPush(currentWinner) {
-	const raffleWinners = JSON.parse(localStorage.getItem("raffleWinners") || []);
+	const storedWinners = localStorage.getItem("raffleWinners") || "[]";
+	const raffleWinners = JSON.parse(storedWinners);
 	raffleWinners.push(currentWinner);
 	//Local storage only accepts strings
 	localStorage.setItem("raffleWinners", JSON.stringify(raffleWinners));
@@ -144,6 +105,7 @@ function highlightAndPush(currentWinner) {
 
 //Controls visibility of element that renders when dialog isn't supported (it appears a div-like block element).
 function checkUnsupportedBrowser (hide) {
+		const dialog = document.querySelector("dialog");
         if (hide === false) {
             dialog.classList.remove("hidden");
             dialog.classList.add("display");
@@ -173,7 +135,7 @@ function toggleClearStorageButtonState (clearStorageButton) {
 
 function clearStorageButtonFunction () {
 	//Note: dialog closes automatically since its form child element has an attribute value of "dialog"
-    
+		const dialog = document.querySelector("dialog");
         if (dialog.classList.contains("unsupported")) {
             checkUnsupportedBrowser(hide = false); //if browser doesn't support dialog element, run function that controls visibility of the element that the browser replaces the dialog  – a div-like block element.
         } else {
@@ -194,7 +156,6 @@ function showRecentRaffleTimestamp () {
 			dateStyle: "full",
 			timeStyle: "long"
 		}).format(new Date(recentRaffleEntryTimestamp));
-    console.log(recentRaffleEntryTimestampUSFormatted);
     //Add "Raffle conducted " + dateVariable to last paragraph in Raffle Entries section
     recentRaffleTimestampParagraph.textContent = `Raffle conducted on ${recentRaffleEntryTimestampUSFormatted}`;
        
@@ -212,8 +173,46 @@ function renderRaffleEntriesList() {
 		mainUl.appendChild(li);
 	});
 }
+function renderPreviousWinnersList() {
+	const localStorageWinners = localStorage.getItem("raffleWinners")
+		? JSON.parse(localStorage.getItem("raffleWinners"))
+		: undefined;
+	if (localStorageWinners) {
+		localStorageWinners.forEach((item) => {
+			let li = document.createElement("li");
+			li.setAttribute("data-name", item.firstName);
+			li.textContent = `${item.firstName}, ${Intl.DateTimeFormat("en-US", {
+				dateStyle: "full",
+				timeStyle: "long"
+			}).format(new Date(item.winDate))}`;
+			const asideUl = document.querySelector("aside ul");
+			asideUl.appendChild(li);
+		});
+		const asideH2 = document.querySelector("aside h2");
+		asideH2.textContent = `Previous Winners: ${JSON.parse(localStorage.raffleWinners).length}`;
+	}
+}
 
 function determineClearWinnersButtonState() {
+	const localStorageWinners = localStorage.getItem("raffleWinners")
+		? JSON.parse(localStorage.getItem("raffleWinners"))
+		: undefined;
+	if (localStorageWinners) {
+		const clearStorageButton = document.querySelector("button#clear-storage-button");
+		clearStorageButton.addEventListener("click", clearStorageButtonFunction);
+		clearStorageButton.removeAttribute("disabled");
+	} else {
+		const clearStorageButton = document.querySelector("button#clear-storage-button");
+		clearStorageButton.setAttribute("disabled", "true");
+	}
+}
+
+function checkDialogBrowserSupport() {
+	//Check if browser supports the dialog element
+	if (window.HTMLDialogElement == undefined) {
+		const dialog = document.querySelector("dialog");
+		dialog.classList.add("unsupported", "hidden");
+	}
 
 }
 
